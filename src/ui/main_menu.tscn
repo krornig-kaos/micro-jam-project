@@ -42,6 +42,10 @@ theme_override_font_sizes/font_size = 80
 text = "SPIRIT HOP"
 horizontal_alignment = 1
 
+[node name="Container" type="Container" parent="VBoxContainer" unique_id=119575666]
+custom_minimum_size = Vector2(0, 86)
+layout_mode = 2
+
 [node name="StartButton" type="Button" parent="VBoxContainer" unique_id=1109967913]
 custom_minimum_size = Vector2(320, 56)
 layout_mode = 2
@@ -62,6 +66,3 @@ layout_mode = 2
 focus_neighbor_top = NodePath("../CreditsButton")
 focus_neighbor_bottom = NodePath("../StartButton")
 theme_override_fonts/font = ExtResource("4_h03rr")
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1304314155]
-anchor_mode = 0
