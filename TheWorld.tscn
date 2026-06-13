@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://61gi4cytsy0s"]
+
+[ext_resource type="PackedScene" uid="uid://bssf4hum7irtr" path="res://src/player.tscn" id="1_ki8aq"]
+[ext_resource type="Script" uid="uid://ctrk2svyir1hr" path="res://src/player.gd" id="2_bml7p"]
+
+[node name="Node2D" type="Node2D" unique_id=435403238]
+
+[node name="Player" parent="." unique_id=366291153 instance=ExtResource("1_ki8aq")]
+script = ExtResource("2_bml7p")
+base_speed = 320.0
+speed_penalty_per_orb = 18.0
+min_speed = 80.0
+intangible_duration = 3.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=229746738]
