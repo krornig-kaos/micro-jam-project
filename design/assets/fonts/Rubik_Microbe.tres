@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" format=3 uid="uid://pe0n3oyfcde1"]
+
+[ext_resource type="FontFile" uid="uid://bqdl5vpfls8gb" path="res://design/assets/fonts/Underdog/Underdog-Regular.ttf" id="1_llou3"]
+
+[resource]
+base_font = ExtResource("1_llou3")

@@ -1,0 +1,35 @@
+{
+  "schema_version": 2,
+  "active_work_id": "menu-spirit-hope-04a3b41b",
+  "works": {
+    "menu-spirit-hope-04a3b41b": {
+      "work_id": "menu-spirit-hope-04a3b41b",
+      "active_plan": "/home/avaldelamar/Documents/micro-jam-project/.omo/plans/menu-spirit-hope.md",
+      "plan_name": "menu-spirit-hope",
+      "status": "active",
+      "started_at": "2026-06-13T16:07:07.093Z",
+      "updated_at": "2026-06-13T16:07:07.093Z",
+      "session_ids": [
+        "opencode:ses_13e501d17ffebROZ06xIAX7Dxq"
+      ],
+      "session_origins": {
+        "opencode:ses_13e501d17ffebROZ06xIAX7Dxq": "direct"
+      },
+      "agent": "atlas",
+      "task_sessions": {}
+    }
+  },
+  "active_plan": "/home/avaldelamar/Documents/micro-jam-project/.omo/plans/menu-spirit-hope.md",
+  "started_at": "2026-06-13T16:07:07.093Z",
+  "status": "active",
+  "updated_at": "2026-06-13T16:07:07.093Z",
+  "session_ids": [
+    "opencode:ses_13e501d17ffebROZ06xIAX7Dxq"
+  ],
+  "session_origins": {
+    "opencode:ses_13e501d17ffebROZ06xIAX7Dxq": "direct"
+  },
+  "plan_name": "menu-spirit-hope",
+  "task_sessions": {},
+  "agent": "atlas"
+}

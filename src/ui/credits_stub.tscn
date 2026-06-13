@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://dge6bpvbyk7qs"]
+
+[ext_resource type="Script" uid="uid://bvbel1ml1rdyi" path="res://src/ui/credits_stub.gd" id="1_credits"]
+[ext_resource type="Theme" uid="uid://bo0c2fcdruisx" path="res://src/ui/theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" uid="uid://ptygd7sk2u1n" path="res://src/ui/parallax_container.tscn" id="3_r853q"]
+
+[node name="CreditsStub" type="Control" unique_id=1263130094]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_credits")
+
+[node name="ParallaxLayers" parent="." unique_id=530475691 instance=ExtResource("3_r853q")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1928605923]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -60.0
+offset_right = 180.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="CreditsLabel" type="Label" parent="VBoxContainer" unique_id=347973558]
+custom_minimum_size = Vector2(320, 40)
+layout_mode = 2
+text = "CREDITS_TITLE"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=116142984]
+custom_minimum_size = Vector2(320, 56)
+layout_mode = 2
+focus_neighbor_top = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+text = "CREDITS_BACK"
