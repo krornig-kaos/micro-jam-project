@@ -92,11 +92,13 @@ animation = &"fly"
 shape = SubResource("CircleShape2D_owl_phys")
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=1106102935]
+visible = false
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1567113874]
 shape = SubResource("CircleShape2D_owl_detect")
 
 [node name="AlertRing" type="Line2D" parent="." unique_id=171407891]
+visible = false
 width = 2.0
 default_color = Color(1, 0, 0, 1)
