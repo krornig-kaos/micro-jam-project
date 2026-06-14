@@ -26,9 +26,10 @@ var _charge_direction: Vector2 = Vector2.ZERO
 func _ready() -> void:
 	add_to_group("enemy")
 	
-	# Hacer que el enemigo solo sea visible bajo la luz (invisible en sombras)
+	# Hacer que el enemigo y su cono de visión solo sean visibles bajo la luz (invisible en sombras)
 	var mat := CanvasItemMaterial.new()
 	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_LIGHT_ONLY
+	material = mat
 	_anim.material = mat
 	
 	_detection.body_entered.connect(_on_detection_entered)
@@ -59,14 +60,14 @@ func _physics_process(delta: float) -> void:
 						_state_timer = 0.4
 		State.WINDUP:
 			velocity = Vector2.ZERO
-			_anim.play("idle")
+			_play_animation("idle", _charge_direction)
 			if _state_timer <= 0.0:
 				_start_charge()
 		State.CHARGE:
 			_do_charge(delta)
 		State.STUN:
 			velocity = Vector2.ZERO
-			_anim.play("idle")
+			_play_animation("idle", Vector2.ZERO)
 			# Efecto visual de aturdimiento parpadeando opcional
 			modulate.g = 0.5
 			modulate.b = 0.5
@@ -80,6 +81,9 @@ func _physics_process(delta: float) -> void:
 		
 	move_and_slide()
 	_check_collisions()
+	
+	# Solicitar redibujado del cono de visión
+	queue_redraw()
 
 func _do_patrol() -> void:
 	var delta := get_physics_process_delta_time()
@@ -124,8 +128,7 @@ func _do_patrol() -> void:
 	var dir := (target - global_position).normalized()
 	velocity = dir * patrol_speed
 	
-	_anim.flip_h = velocity.x < 0
-	_anim.play("walk")
+	_play_animation("walk", velocity)
 
 func _start_windup() -> void:
 	current_state = State.WINDUP
@@ -147,8 +150,7 @@ func _do_charge(_delta: float) -> void:
 		_charge_direction = lerp(_charge_direction, desired_dir, 0.05).normalized()
 		
 	velocity = _charge_direction * charge_speed
-	_anim.flip_h = velocity.x < 0
-	_anim.play("run")
+	_play_animation("run", velocity)
 	
 	# Si choca contra una pared (obstáculo sólido) se aturde de inmediato
 	if get_slide_collision_count() > 0:
@@ -193,6 +195,26 @@ func _get_player_node() -> Node2D:
 		return players[0]
 	return null
 
+func _play_animation(animation_base: String, dir: Vector2) -> void:
+	if dir != Vector2.ZERO:
+		if dir.x != 0.0:
+			_anim.flip_h = dir.x < 0.0
+			
+		var suffix := ""
+		if absf(dir.x) >= absf(dir.y):
+			suffix = "_side"
+		else:
+			suffix = "_up" if dir.y < 0.0 else "_down"
+			
+		var anim_name = animation_base + suffix
+		if _anim.sprite_frames.has_animation(anim_name):
+			_anim.play(anim_name)
+			return
+			
+	# Fallback a la animación básica
+	if _anim.sprite_frames.has_animation(animation_base):
+		_anim.play(animation_base)
+
 func _on_detection_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		_player = body
@@ -215,3 +237,29 @@ func on_player_spotted(spotted_position: Vector2) -> void:
 		current_state = State.WINDUP
 		_state_timer = 0.4
 		_anim.play("idle")
+
+func _draw() -> void:
+	# Dibujar el cono de visión del jabalí alineado con la rotación de su detección
+	var points := PackedVector2Array()
+	points.append(Vector2.ZERO)
+	
+	var steps := 12
+	var radius := 100.0 # Basado en CollisionPolygon2D del editor (100 de alcance)
+	var half_angle := deg_to_rad(45.0) # Cono de 90 grados
+	var base_angle := _detection.rotation
+	
+	var start_angle := base_angle - half_angle
+	var end_angle := base_angle + half_angle
+	
+	for i in range(steps + 1):
+		var angle = start_angle + (float(i) / steps) * (end_angle - start_angle)
+		points.append(Vector2(cos(angle), sin(angle)) * radius)
+		
+	# Definir color: Naranja por defecto, Amarillo en Windup, Rojo en Carga
+	var color := Color(1.0, 0.5, 0.1, 0.05)
+	if current_state == State.CHARGE:
+		color = Color(1.0, 0.1, 0.1, 0.15)
+	elif current_state == State.WINDUP:
+		color = Color(1.0, 0.8, 0.1, 0.1)
+		
+	draw_polygon(points, [color])

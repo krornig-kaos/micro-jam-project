@@ -43,9 +43,10 @@ func _ready() -> void:
 	add_to_group("enemy")
 	add_to_group("non_lethal")
 	
-	# Hacer que el enemigo solo sea visible bajo la luz (invisible en sombras)
+	# Hacer que el enemigo y su cono de visión solo sean visibles bajo la luz (invisible en sombras)
 	var mat := CanvasItemMaterial.new()
 	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_LIGHT_ONLY
+	material = mat
 	_anim.material = mat
 	
 	_detection.body_entered.connect(_on_detection_entered)
@@ -63,8 +64,6 @@ func _ready() -> void:
 		ring_mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 		_alert_ring.material = ring_mat
 		_setup_alert_ring()
-	
-	_anim.play("fly")
 
 func _physics_process(delta: float) -> void:
 	# Detección acústica (Oído del Búho)
@@ -126,6 +125,14 @@ func _physics_process(delta: float) -> void:
 
 	# Actualizar la animación de la onda expansiva
 	_update_alert_ring(delta)
+
+	# Actualizar animación direccional (quieto en WATCH, volando en EXPLORE)
+	var current_dir := Vector2.UP.rotated(global_rotation)
+	var anim_name := "fly" if current_state == State.EXPLORE else "idle"
+	_play_animation(anim_name, current_dir)
+	
+	# Solicitar redibujado del cono de visión
+	queue_redraw()
 
 ## Inicia el estado de vuelo circular
 func _start_explore() -> void:
@@ -258,3 +265,43 @@ func _get_player_node() -> Node2D:
 	if players.size() > 0:
 		return players[0]
 	return null
+
+func _draw() -> void:
+	# Dibujar el cono de visión en base a la rotación local del nodo (cabeza del búho apunta hacia UP por defecto)
+	var points := PackedVector2Array()
+	points.append(Vector2.ZERO) # Origen en el centro del búho
+	
+	var steps := 16
+	var start_angle := -PI / 2.0 - deg_to_rad(cone_angle / 2.0)
+	var end_angle := -PI / 2.0 + deg_to_rad(cone_angle / 2.0)
+	
+	for i in range(steps + 1):
+		var angle = start_angle + (float(i) / steps) * (end_angle - start_angle)
+		points.append(Vector2(cos(angle), sin(angle)) * detection_radius)
+		
+	# Definir color: Amarillo suave normal, Rojo si está alertado
+	var color := Color(1.0, 0.9, 0.2, 0.08)
+	if _alerted:
+		color = Color(1.0, 0.1, 0.1, 0.16)
+		
+	draw_polygon(points, [color])
+
+func _play_animation(animation_base: String, dir: Vector2) -> void:
+	if dir != Vector2.ZERO:
+		if dir.x != 0.0:
+			_anim.flip_h = dir.x < 0.0
+			
+		var suffix := ""
+		if absf(dir.x) >= absf(dir.y):
+			suffix = "_side"
+		else:
+			suffix = "_up" if dir.y < 0.0 else "_down"
+			
+		var anim_name = animation_base + suffix
+		if _anim.sprite_frames.has_animation(anim_name):
+			_anim.play(anim_name)
+			return
+			
+	# Fallback a la animación básica
+	if _anim.sprite_frames.has_animation(animation_base):
+		_anim.play(animation_base)

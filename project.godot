@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Paused="*uid://bpdaxsjh53ueo"
+Paused="*res://src/ui/paused.gd"
 
 [dotnet]
 

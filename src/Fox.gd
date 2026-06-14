@@ -2,7 +2,7 @@
 ## Si el player está en sigilo no lo detecta.
 extends CharacterBody2D
 
-@export var patrol_speed: float = 80.0
+@export var patrol_speed: float = 100.0
 @export var chase_speed: float = 160.0
 @export var detection_radius: float = 150.0
 @export var patrol_capsule_length: float = 180.0
@@ -24,9 +24,10 @@ var _investigate_timer: float = 0.0
 func _ready() -> void:
 	add_to_group("enemy")
 	
-	# Hacer que el enemigo solo sea visible bajo la luz (invisible en sombras)
+	# Hacer que el enemigo y su cono de visión solo sean visibles bajo la luz (invisible en sombras)
 	var mat := CanvasItemMaterial.new()
 	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_LIGHT_ONLY
+	material = mat
 	_anim.material = mat
 	
 	_detection.body_entered.connect(_on_detection_entered)
@@ -74,6 +75,9 @@ func _physics_process(_delta: float) -> void:
 		
 	move_and_slide()
 	_check_collisions()
+	
+	# Solicitar redibujado del cono de visión
+	queue_redraw()
 
 func _check_collisions() -> void:
 	for i in get_slide_collision_count():
@@ -126,8 +130,7 @@ func _do_patrol() -> void:
 	var dir := (target - global_position).normalized()
 	velocity = dir * patrol_speed
 	
-	_anim.flip_h = velocity.x < 0
-	_anim.play("walk")
+	_play_animation("walk", velocity)
 
 func _do_chase() -> void:
 	if not _player:
@@ -144,8 +147,7 @@ func _do_chase() -> void:
 			velocity_dir = Vector2(-normal.y, normal.x)
 			
 	velocity = velocity_dir * chase_speed
-	_anim.flip_h = velocity.x < 0
-	_anim.play("run")
+	_play_animation("run", velocity)
 
 func _do_investigate(delta: float) -> void:
 	# Decrementar el temporizador siempre para evitar quedar atascado permanentemente
@@ -168,12 +170,11 @@ func _do_investigate(delta: float) -> void:
 				velocity_dir = Vector2(-normal.y, normal.x)
 				
 		velocity = velocity_dir * chase_speed
-		_anim.flip_h = velocity.x < 0
-		_anim.play("run")
+		_play_animation("run", velocity)
 	else:
 		# Llegó a la posición, se detiene e investiga quieto
 		velocity = Vector2.ZERO
-		_anim.play("walk")  # Usar animación de caminar como idle provisional
+		_play_animation("walk", Vector2.ZERO)
 
 func _on_detection_entered(body: Node) -> void:
 	print("_on_detection_entered: ", body.is_in_group("player"), "name: ", body.name)
@@ -188,8 +189,28 @@ func _on_detection_exited(body: Node) -> void:
 	if body.is_in_group("player"):
 		if current_state == State.CHASE:
 			_last_known_position = body.global_position
-			_investigate_timer = investigate_duration
-			current_state = State.INVESTIGATE
+		_investigate_timer = investigate_duration
+		current_state = State.INVESTIGATE
+
+func _play_animation(animation_base: String, dir: Vector2) -> void:
+	if dir != Vector2.ZERO:
+		if dir.x != 0.0:
+			_anim.flip_h = dir.x < 0.0
+			
+		var suffix := ""
+		if absf(dir.x) >= absf(dir.y):
+			suffix = "_side"
+		else:
+			suffix = "_up" if dir.y < 0.0 else "_down"
+			
+		var anim_name = animation_base + suffix
+		if _anim.sprite_frames.has_animation(anim_name):
+			_anim.play(anim_name)
+			return
+			
+	# Fallback a la animación básica
+	if _anim.sprite_frames.has_animation(animation_base):
+		_anim.play(animation_base)
 		_player = null
 
 ## Comprueba si hay línea de visión directa con el player (sin obstáculos en medio)
@@ -238,3 +259,29 @@ func on_player_spotted(spotted_position: Vector2) -> void:
 		_last_known_position = spotted_position
 		_investigate_timer = investigate_duration
 		current_state = State.INVESTIGATE
+
+func _draw() -> void:
+	# Dibujar el cono de visión del zorro alineado con la rotación de su detección
+	var points := PackedVector2Array()
+	points.append(Vector2.ZERO)
+	
+	var steps := 12
+	var radius := 120.0 # Basado en CollisionPolygon2D del editor (120 de alcance)
+	var half_angle := deg_to_rad(40.0) # Cono de 80 grados
+	var base_angle := _detection.rotation
+	
+	var start_angle := base_angle - half_angle
+	var end_angle := base_angle + half_angle
+	
+	for i in range(steps + 1):
+		var angle = start_angle + (float(i) / steps) * (end_angle - start_angle)
+		points.append(Vector2(cos(angle), sin(angle)) * radius)
+		
+	# Definir color: Amarillo/Naranja en patrulla, Amarillo en Investigación, Rojo en Persecución
+	var color := Color(1.0, 0.65, 0.1, 0.05)
+	if current_state == State.CHASE:
+		color = Color(1.0, 0.1, 0.1, 0.15)
+	elif current_state == State.INVESTIGATE:
+		color = Color(1.0, 0.85, 0.1, 0.08)
+		
+	draw_polygon(points, [color])

@@ -555,8 +555,10 @@ radius = 14.866069
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("3_ehvfd")
+sprint_multiplier = 1.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=754453594]
+visible = false
 shape = SubResource("CapsuleShape2D_rc2ur")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=456348406]
@@ -565,6 +567,7 @@ sprite_frames = SubResource("SpriteFrames_21lrq")
 animation = &"death"
 
 [node name="PickupArea" type="Area2D" parent="." unique_id=659996611]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea" unique_id=1480937912]
 shape = SubResource("CapsuleShape2D_gmfve")
@@ -578,6 +581,7 @@ wait_time = 3.0
 one_shot = true
 
 [node name="StealthDetector" type="Area2D" parent="." unique_id=903071206]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StealthDetector" unique_id=41088875]
 shape = SubResource("CircleShape2D_pg28d")

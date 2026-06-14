@@ -24,6 +24,9 @@ func _ready() -> void:
 	
 	_initial_position = global_position
 	body_entered.connect(_on_body_entered)
+	
+	# Inicializar rastro de partículas místicas
+	_setup_trail_particles()
 
 func _process(delta: float) -> void:
 	_time += delta
@@ -57,6 +60,59 @@ func release() -> void:
 	tween.tween_property(_sprite, "modulate:a", 1.0, 0.3)
 	tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.3)
 
+## Llamado al entregar el alma con éxito en el Altar (Punto B)
+func consume_delivered(player_node: Node2D) -> void:
+	if _collected and _player == player_node:
+		_collected = false
+		_player = null
+		
+		# Animación de desvanecimiento ascendente al liberarse
+		var tween := create_tween()
+		tween.set_parallel(true)
+		tween.tween_property(_sprite, "modulate:a", 0.0, 0.4)
+		tween.tween_property(self, "scale", Vector2(0.0, 0.0), 0.4)
+		tween.tween_property(self, "global_position", global_position + Vector2(0, -40), 0.4)
+		
+		# Eliminar el alma una vez termine la animación
+		tween.chain().tween_callback(queue_free)
+
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player") and not _collected:
 		body.call("_on_pickup_body_entered", self)
+
+func _setup_trail_particles() -> void:
+	var particles := CPUParticles2D.new()
+	particles.amount = 12
+	particles.lifetime = 0.5
+	particles.local_coords = false # IMPORTANTE: Crea el rastro (trail) en el mundo al moverse
+	particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
+	particles.emission_sphere_radius = 8.0
+	
+	# Gravedad y dirección hacia arriba de forma sutil
+	particles.gravity = Vector2(0.0, -20.0)
+	
+	# Variación de velocidad inicial
+	particles.spread = 180.0
+	particles.initial_velocity_min = 5.0
+	particles.initial_velocity_max = 15.0
+	
+	# Escala inicial y curva de atenuación
+	particles.scale_amount_min = 2.0
+	particles.scale_amount_max = 4.0
+	
+	# Color: Chispas celestes/místicas semi-transparentes
+	particles.color = Color(0.4, 0.8, 1.0, 0.6)
+	
+	# Curva de color o atenuación lineal
+	var color_ramp := Gradient.new()
+	color_ramp.offsets = [0.0, 1.0]
+	color_ramp.colors = [Color(0.4, 0.8, 1.0, 0.6), Color(0.4, 0.8, 1.0, 0.0)]
+	particles.color_ramp = color_ramp
+	
+	# Hacer que no se vea afectada por la iluminación del material LIGHT_MODE_LIGHT_ONLY
+	# Queremos que las chispas brillen en la oscuridad
+	var mat := CanvasItemMaterial.new()
+	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	particles.material = mat
+	
+	add_child(particles)

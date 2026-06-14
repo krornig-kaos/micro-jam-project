@@ -1797,6 +1797,9 @@ limit_top = 0
 limit_right = 1152
 limit_bottom = 648
 
+[node name="SoulAltar" parent="." unique_id=491116899 instance=ExtResource("24_xdqfp")]
+position = Vector2(1024, 465)
+
 [node name="CurvedTree1" type="StaticBody2D" parent="." unique_id=257331997]
 position = Vector2(600, 200)
 
@@ -1961,13 +1964,10 @@ patrol_capsule_radius = 4.0
 position = Vector2(1069, 104)
 
 [node name="Owl" parent="." unique_id=624140609 instance=ExtResource("24_lgqmj")]
-position = Vector2(473, 476)
+position = Vector2(470, 477)
 explore_cooldown = 20.0
 patrol_radius = 90.0
 patrol_speed = 127.0
-
-[node name="SoulAltar" parent="." unique_id=491116899 instance=ExtResource("24_xdqfp")]
-position = Vector2(1024, 465)
 
 [node name="Soul" parent="." unique_id=1089023276 instance=ExtResource("25_lgqmj")]
 position = Vector2(193, 356)

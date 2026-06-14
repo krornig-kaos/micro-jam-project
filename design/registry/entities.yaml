@@ -86,6 +86,14 @@ items:
     added: 2026-06-14
     revised: ""
 
+  - name: powerup_intangible
+    status: active
+    source: design/gdd/movement-system.md
+    referenced_by:
+      - design/gdd/movement-system.md
+    added: 2026-06-14
+    revised: ""
+
 # ─── FORMULAS ────────────────────────────────────────────────────────────────
 formulas:
   - name: player_effective_speed

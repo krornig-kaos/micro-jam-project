@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://b16kqgrftb67q"]
 
 [ext_resource type="Texture2D" uid="uid://n7m4hrajk2hm" path="res://design/assets/vegetation/Assets/Light_balls_tree1.png" id="1"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(40, 36)
+[sub_resource type="CircleShape2D" id="CircleShape2D_cj05u"]
+radius = 12.0
 
-[node name="LightBallsTree1" type="StaticBody2D" groups=["vegetation"]]
+[node name="LightBallsTree1" type="StaticBody2D" unique_id=988413791 groups=["vegetation"]]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=266997893]
 texture = ExtResource("1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 44)
-shape = SubResource("RectangleShape2D_1")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1628715164]
+position = Vector2(1, 30)
+shape = SubResource("CircleShape2D_cj05u")
