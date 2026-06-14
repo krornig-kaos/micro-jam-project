@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" uid="uid://doptr1u7xu7mj" path="res://design/assets/vegetation/Assets/Chanterelles2.png" id="1"]
+
+[node name="Chanterelles2" type="Sprite2D"]
+scale = Vector2(0.53125, 0.53125)
+texture = ExtResource("1")

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" uid="uid://b8u8is1nm30ks" path="res://design/assets/vegetation/Assets/White-red_mushroom1.png" id="1"]
+
+[node name="WhiteRedMushroom1" type="Sprite2D"]
+scale = Vector2(0.23046881, 0.23046881)
+texture = ExtResource("1")

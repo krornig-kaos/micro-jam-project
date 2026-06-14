@@ -1,45 +1,57 @@
-# Forest Movement Concept Prototype
+# Level 1 — Forest Scene
 
-## Hypothesis
-If the player navigates a forest built from vegetation/structure tile assets
-(collision on trees/ruins) and a carry-weight value scales movement speed down,
-movement will feel like weaving through a living forest with mounting burden —
-confirmed if a player can path through a cluster of 5+ obstacles at full speed,
-then again "weighted," and notices a real maneuverability difference, not just
-a number change.
+## Overview
+`main.tscn` is the first real level scene: a top-down forest area built from
+three hand-painted ground layers, reusable prop scenes, the player, and three
+enemy types (Fox, Boar, Owl).
 
 ## How to Run
 1. Open `main.tscn` in the Godot 4.6 editor.
 2. Press F6 (Run Current Scene).
-3. Controls:
-   - Arrow keys: move (8-directional)
-   - `+` / `-` (or numpad +/-): add/remove a carried orb (debug)
-   - HUD shows orb count and current speed: `220 / (1 + 0.15 * orbs)`
+3. Controls (see `src/player.gd`):
+   - Arrow keys / WASD (`ui_left/right/up/down`): move (8-directional)
+   - `Shift`: sprint
+   - `C`: hold to enter stealth (hide when inside a `HideSpot`)
+   - Input action `powerup_intangible`: brief intangibility
 
-## World Layout
-`main.tscn` is hand-authored — every obstacle and decoration is a real node,
-fully editable in the 2D viewport:
-- **Ground** (TileMapLayer): grass tiles from `design/assets/Tilesets/Tileset-Terrain2.png`
-  (16x16 atlas, 4x4 block of plain-grass variants at atlas coords (38-41, 10-13)).
-  No autotile rules — `ground_fill.gd` fills the play area at runtime by randomly
-  picking one of the 16 grass variants per cell. Open the TileSet in the Inspector
-  to add more tiles to the palette and paint manually in the editor if desired.
-- **Obstacles** (StaticBody2D + Sprite2D + CollisionShape2D): trees, ruins —
-  drag to reposition, resize the collision shape via its gizmo handles, or
-  swap the `texture` field in the Inspector. 12 placed: Curved_tree1/2,
-  Mega_tree1, Willow1, Light_balls_tree1, Luminous_tree1, White_tree1,
-  Tree_idol_deer, Brown_ruins1/2, Brown-gray_ruins1/3.
-- **Decorations** (Sprite2D only, no collision): mushrooms + chanterelles —
-  purely visual, drag freely. 5 placed: Beige_green_mushroom1,
-  White-red_mushroom1, Chanterelles1/2/3.
-- Root `Main` node has `y_sort_enabled = true` for top-down depth.
+## Scene Composition
+`Main` (`Node2D`, `y_sort_enabled = true`) contains:
+- **Ground** / **GroundDetail** / **GroundAccent** (`TileMapLayer`):
+  hand-painted grass tiles from `design/assets/Tilesets/Tileset-Terrain2.png`,
+  sharing one `tileset_ground`/`atlas_grass` `TileSet`. `GroundAccent` is a
+  small detail layer (~30 tiles) drawn on top of the other two. Tile data is
+  baked into `tile_map_data` — there is no runtime fill script.
+- **Player** (instance of `src/player.tscn`, production `src/player.gd`)
+  with a child **Camera2D** (limits `0,0,1152,648`).
+- **25 reusable prop instances** from `src/props/` — see below.
+- **Fox**, **Boar**, **Owl** (instances of `src/Fox.tscn`, `src/Boar.tscn`,
+  `src/Owl.tscn`).
 
-Collision boxes are sized to each sprite's trunk/base, not the full canopy, so
-the player can walk close to and visually pass behind tall trees — groundwork
-for the later hide-behind-obstacles stealth mechanic (not implemented yet).
+## Reusable Props (`src/props/`)
+Every obstacle and decoration is its own scene, instanced here with a
+`position` override only (scale/collision tuning is baked into the prop):
+
+- **Obstacles** (`StaticBody2D` + `Sprite2D` + `CollisionShape2D`):
+  `CurvedTree1`, `CurvedTree2`, `CurvedTree3`, `MegaTree1`, `Willow1`,
+  `LightBallsTree1`, `LuminousTree1`, `SwirlingTree1`, `WhiteTree1`,
+  `TreeIdolDeer`, `TreeIdolWolf`, `LivingGazebo1`, `BrownRuins1`,
+  `BrownRuins2`, `BrownRuins4`, `BrownGrayRuins1`, `BrownGrayRuins2`,
+  `BrownGrayRuins3`.
+- **Decorations** (`Sprite2D` only, no collision): `BeigeMushroom1`,
+  `BeigeGreenMushroom2`, `WhiteRedMushroom1`, `WhiteRedMushroom2`,
+  `Chanterelles1`, `Chanterelles2`, `Chanterelles3`.
+- **HideSpot.tscn**: shared stealth component (`Area2D` in
+  `groups=["hide_spot"]` + `CollisionShape2D`). `CurvedTree1` includes one
+  as a child — entering it while holding `C` lets `src/player.gd` enter
+  `State.STEALTH` (`is_hidden()` becomes true).
+
+To add a new prop: create a `.tscn` under `src/props/` following the same
+pattern, then instance it here with `instance=ExtResource("...")` and a
+`position`. See `docs/architecture/adr-002-reusable-prop-scenes.md` for the
+full convention and the Ground-layer fix history.
 
 ## Status
-In progress.
+In progress — Level 1 layout populated with reusable props and enemies.
 
 ## Findings
 TBD — pending playtest.

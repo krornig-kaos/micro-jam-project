@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" uid="uid://duqhf641pry2r" path="res://design/assets/vegetation/Assets/White_tree1.png" id="1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(40, 36)
+
+[node name="WhiteTree1" type="StaticBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1, 12)
+scale = Vector2(1.1953125, 1.1953125)
+texture = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, 42)
+shape = SubResource("RectangleShape2D_1")
