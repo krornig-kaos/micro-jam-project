@@ -16,7 +16,6 @@ var _alerted: bool = false
 # Variables para la onda expansiva roja
 var _ring_radius: float = 0.0
 var _ring_max_radius: float = 40.0
-var _ring_fade_speed: float = 2.0
 var _ring_alpha: float = 1.0
 
 @onready var _anim: AnimatedSprite2D = $AnimatedSprite2D
