@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://dsotfbc6r8mxk"]
+
+[ext_resource type="Script" uid="uid://oc4vp3bga561" path="res://src/Owl.gd" id="1_owl_script"]
+[ext_resource type="Texture2D" uid="uid://buwkww4qpnymu" path="res://design/assets/characters/Without_shadow/Black_grouse/Black_grouse_Flight.png" id="2_owl_flight"]
+[ext_resource type="Texture2D" uid="uid://br0mc3nnv0wne" path="res://design/assets/characters/Without_shadow/Black_grouse/Black_grouse_Idle.png" id="3_owl_idle"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_flight_1"]
+atlas = ExtResource("2_owl_flight")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_flight_2"]
+atlas = ExtResource("2_owl_flight")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_flight_3"]
+atlas = ExtResource("2_owl_flight")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_flight_4"]
+atlas = ExtResource("2_owl_flight")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_1"]
+atlas = ExtResource("3_owl_idle")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_2"]
+atlas = ExtResource("3_owl_idle")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_3"]
+atlas = ExtResource("3_owl_idle")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_4"]
+atlas = ExtResource("3_owl_idle")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_owl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_flight_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_flight_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_flight_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_flight_4")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_owl_phys"]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_owl_detect"]
+radius = 250.0
+
+[node name="Owl" type="CharacterBody2D" unique_id=1673551874 groups=["enemy"]]
+collision_layer = 4
+script = ExtResource("1_owl_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=988805721]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_owl")
+animation = &"fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=926293643]
+shape = SubResource("CircleShape2D_owl_phys")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1106102935]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1567113874]
+shape = SubResource("CircleShape2D_owl_detect")
+
+[node name="AlertRing" type="Line2D" parent="." unique_id=171407891]
+width = 2.0
+default_color = Color(1, 0, 0, 1)

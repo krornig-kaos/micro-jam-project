@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://brgy235rl7p7"]
+
+[ext_resource type="Script" uid="uid://bos3eprwng2ro" path="res://src/Fox.gd" id="1_ygxpj"]
+[ext_resource type="Texture2D" uid="uid://cphki37c0ygu" path="res://design/assets/characters/Without_shadow/Fox/Fox_Idle.png" id="2_2r5ls"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ame8k"]
+atlas = ExtResource("2_2r5ls")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0iar4"]
+atlas = ExtResource("2_2r5ls")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t5j54"]
+atlas = ExtResource("2_2r5ls")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_md7a7"]
+atlas = ExtResource("2_2r5ls")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2r5ls"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ame8k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0iar4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t5j54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_md7a7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0iar4"]
+height = 20.0
+
+[node name="Fox" type="CharacterBody2D" unique_id=1078199014]
+scale = Vector2(2, 2)
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_ygxpj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1515562510]
+sprite_frames = SubResource("SpriteFrames_2r5ls")
+frame_progress = 0.8974613
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1335290355]
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="DetectionArea" unique_id=983315767]
+polygon = PackedVector2Array(0, 0, 120, -40, 120, 40)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1132883138]
+shape = SubResource("CapsuleShape2D_0iar4")
