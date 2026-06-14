@@ -212,6 +212,10 @@ func die() -> void:
 	current_state = State.DEAD
 	player_died.emit()
 	_anim.play("death")
+	_release_souls()
+
+func _release_souls() -> void:
+	get_tree().call_group("orb", "release")
 
 func take_hit() -> void:
 	print("Player hit!")
