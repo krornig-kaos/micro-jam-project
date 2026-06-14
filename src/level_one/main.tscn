@@ -1,17 +1,18 @@
-[gd_scene format=4 uid="uid://b8n0l4cyns2ag"]
+[gd_scene format=4 uid="uid://dk3d16gmpxrq6"]
 
 [ext_resource type="Texture2D" uid="uid://cfxl48uyqp21i" path="res://design/assets/Tilesets/Tileset-Terrain-water.png" id="1_o7dey"]
 [ext_resource type="Texture2D" uid="uid://bbhns6m1tygsu" path="res://design/assets/Tilesets/Tileset-Terrain2.png" id="1_vrqf0"]
 [ext_resource type="PackedScene" uid="uid://ds07qstrime8d" path="res://src/SoulAltar.tscn" id="2_rxlj3"]
 [ext_resource type="PackedScene" uid="uid://ip57y6gw2tua" path="res://src/PowerupIntangible.tscn" id="31_rxlj3"]
+[ext_resource type="PackedScene" uid="uid://bme1vkb7tiaff" path="res://src/Soul.tscn" id="34_e5ybp"]
 [ext_resource type="PackedScene" uid="uid://cb5cxlx1pxq7y" path="res://src/Boar.tscn" id="boar"]
 [ext_resource type="PackedScene" uid="uid://brgy235rl7p7" path="res://src/Fox.tscn" id="fox"]
 [ext_resource type="PackedScene" uid="uid://dsotfbc6r8mxk" path="res://src/Owl.tscn" id="owl"]
-[ext_resource type="PackedScene" uid="uid://c18do58julplo" path="res://src/props/CurvedTree1.tscn" id="p01"]
+[ext_resource type="PackedScene" path="res://src/props/CurvedTree1.tscn" id="p01"]
 [ext_resource type="PackedScene" path="res://src/props/CurvedTree2.tscn" id="p02"]
 [ext_resource type="PackedScene" path="res://src/props/MegaTree1.tscn" id="p03"]
 [ext_resource type="PackedScene" uid="uid://ce3kgo44i18pa" path="res://src/props/Willow1.tscn" id="p04"]
-[ext_resource type="PackedScene" uid="uid://b16kqgrftb67q" path="res://src/props/LightBallsTree1.tscn" id="p05"]
+[ext_resource type="PackedScene" path="res://src/props/LightBallsTree1.tscn" id="p05"]
 [ext_resource type="PackedScene" uid="uid://cercpynv0vwck" path="res://src/props/LuminousTree1.tscn" id="p06"]
 [ext_resource type="PackedScene" path="res://src/props/WhiteTree1.tscn" id="p07"]
 [ext_resource type="PackedScene" uid="uid://dbxeiijx0kl6" path="res://src/props/TreeIdolDeer.tscn" id="p08"]
@@ -26,7 +27,7 @@
 [ext_resource type="PackedScene" path="res://src/props/Chanterelles3.tscn" id="p17"]
 [ext_resource type="PackedScene" path="res://src/props/CurvedTree3.tscn" id="p18"]
 [ext_resource type="PackedScene" uid="uid://dmlqtg6edmctx" path="res://src/props/SwirlingTree1.tscn" id="p19"]
-[ext_resource type="PackedScene" uid="uid://naw5ddcd11f7" path="res://src/props/LivingGazebo1.tscn" id="p20"]
+[ext_resource type="PackedScene" path="res://src/props/LivingGazebo1.tscn" id="p20"]
 [ext_resource type="PackedScene" uid="uid://dw1jskucfmha4" path="res://src/props/TreeIdolWolf.tscn" id="p21"]
 [ext_resource type="PackedScene" path="res://src/props/BrownRuins4.tscn" id="p22"]
 [ext_resource type="PackedScene" path="res://src/props/BrownGrayRuins2.tscn" id="p23"]
@@ -1513,11 +1514,117 @@ scale = Vector2(0.21484423, 0.21484423)
 
 [node name="WhiteRedMushroom1" parent="." unique_id=1122301759 instance=ExtResource("p14")]
 position = Vector2(567.75, 618.75)
-[node name="Fox" parent="." unique_id=238164380 instance=ExtResource("fox")]
-position = Vector2(437, 151)
 
 [node name="CurvedTree1" parent="." unique_id=62437313 groups=["enemy", "hide_spot", "player"] instance=ExtResource("p01")]
 position = Vector2(588, 199)
+
+[node name="CurvedTree2" parent="." unique_id=541786266 instance=ExtResource("p02")]
+position = Vector2(955, 612)
+
+[node name="MegaTree1" parent="." unique_id=1352765879 instance=ExtResource("p03")]
+position = Vector2(770, 474)
+
+[node name="Willow1" parent="." unique_id=366345443 instance=ExtResource("p04")]
+position = Vector2(219, 546)
+
+[node name="LightBallsTree1" parent="." unique_id=604147164 instance=ExtResource("p05")]
+position = Vector2(93, 141)
+
+[node name="LuminousTree1" parent="." unique_id=1646010448 instance=ExtResource("p06")]
+position = Vector2(390, 550)
+
+[node name="LuminousTree3" parent="." unique_id=1871518452 instance=ExtResource("p06")]
+position = Vector2(44, 348)
+
+[node name="BrownRuins4" parent="LuminousTree3" unique_id=769774030 instance=ExtResource("p22")]
+position = Vector2(109, 33)
+
+[node name="LuminousTree2" parent="LuminousTree3" unique_id=309307239 instance=ExtResource("p06")]
+position = Vector2(53, 44)
+
+[node name="LuminousTree4" parent="LuminousTree3" unique_id=668288148 instance=ExtResource("p06")]
+position = Vector2(-9, 76)
+
+[node name="LuminousTree5" parent="LuminousTree3" unique_id=1653499913 instance=ExtResource("p06")]
+position = Vector2(110, 97)
+
+[node name="LuminousTree6" parent="LuminousTree3" unique_id=235650389 instance=ExtResource("p06")]
+position = Vector2(44, 94)
+
+[node name="LuminousTree6" parent="." unique_id=1079747718 instance=ExtResource("p06")]
+position = Vector2(2268, 3300)
+
+[node name="LuminousTree8" parent="." unique_id=1925903877 instance=ExtResource("p06")]
+position = Vector2(970, 176)
+
+[node name="LuminousTree9" parent="." unique_id=238441967 instance=ExtResource("p06")]
+position = Vector2(1027, 230)
+
+[node name="LuminousTree9" parent="LuminousTree9" unique_id=1127083736 instance=ExtResource("p06")]
+position = Vector2(-2, 40)
+
+[node name="LuminousTree10" parent="." unique_id=2083513060 instance=ExtResource("p06")]
+position = Vector2(971, 260)
+
+[node name="LuminousTree11" parent="." unique_id=530572480 instance=ExtResource("p06")]
+position = Vector2(1088, 269)
+
+[node name="LuminousTree12" parent="." unique_id=1374300223 instance=ExtResource("p06")]
+position = Vector2(2430, 3741)
+
+[node name="LuminousTree7" parent="." unique_id=833099035 instance=ExtResource("p06")]
+position = Vector2(602, 577)
+
+[node name="LuminousTree7" parent="LuminousTree7" unique_id=194603036 instance=ExtResource("p06")]
+position = Vector2(-72, -65)
+
+[node name="LuminousTree8" parent="LuminousTree7" unique_id=1002267008 instance=ExtResource("p06")]
+position = Vector2(-79, -34)
+
+[node name="LuminousTree9" parent="LuminousTree7" unique_id=1032667017 instance=ExtResource("p06")]
+position = Vector2(73, 28)
+
+[node name="LuminousTree10" parent="LuminousTree7" unique_id=1491544327 instance=ExtResource("p06")]
+position = Vector2(-119, 25)
+
+[node name="LuminousTree11" parent="LuminousTree7" unique_id=1961496422 instance=ExtResource("p06")]
+position = Vector2(-19, -63)
+
+[node name="WhiteTree1" parent="." unique_id=1075665073 instance=ExtResource("p07")]
+position = Vector2(1113, 525)
+
+[node name="TreeIdolDeer" parent="." unique_id=946505282 instance=ExtResource("p08")]
+position = Vector2(1069, 37)
+
+[node name="BrownRuins1" parent="." unique_id=801828163 instance=ExtResource("p09")]
+position = Vector2(585, 382)
+
+[node name="BrownRuins2" parent="." unique_id=366340050 instance=ExtResource("p10")]
+position = Vector2(1128, 380)
+
+[node name="BrownGrayRuins1" parent="." unique_id=895233196 instance=ExtResource("p11")]
+position = Vector2(973, 32)
+
+[node name="BrownGrayRuins3" parent="." unique_id=1997142067 instance=ExtResource("p12")]
+position = Vector2(1148, 294)
+
+[node name="CurvedTree3" parent="." unique_id=1304981489 instance=ExtResource("p18")]
+position = Vector2(250, 280)
+
+[node name="SwirlingTree2" parent="." unique_id=1333771336 instance=ExtResource("p19")]
+position = Vector2(21, 607)
+
+[node name="SwirlingTree1" parent="." unique_id=730214846 instance=ExtResource("p19")]
+position = Vector2(895, 218)
+
+[node name="LivingGazebo1" parent="." unique_id=959688398 instance=ExtResource("p20")]
+position = Vector2(300, 80)
+
+[node name="TreeIdolWolf" parent="." unique_id=1568143241 instance=ExtResource("p21")]
+position = Vector2(112, 552)
+
+[node name="BrownGrayRuins2" parent="." unique_id=876654273 instance=ExtResource("p23")]
+position = Vector2(729, 340)
 
 [node name="Fox" parent="." unique_id=191682798 instance=ExtResource("fox")]
 position = Vector2(477, 396)
@@ -1528,5 +1635,23 @@ position = Vector2(905, 96)
 [node name="Owl" parent="." unique_id=1098107315 instance=ExtResource("owl")]
 position = Vector2(645, 527)
 
-[node name="PowerupIntangible" parent="." unique_id=925242944 instance=ExtResource("31_rxlj3")]
-position = Vector2(422, 297)
+[node name="PowerupIntangible" parent="." unique_id=1205778139 instance=ExtResource("31_rxlj3")]
+position = Vector2(344, 429)
+
+[node name="Soul" parent="." unique_id=1089023276 instance=ExtResource("34_e5ybp")]
+position = Vector2(187, 326)
+
+[node name="Soul2" parent="." unique_id=1702242580 instance=ExtResource("34_e5ybp")]
+position = Vector2(423, 74)
+
+[node name="Soul3" parent="." unique_id=28344162 instance=ExtResource("34_e5ybp")]
+position = Vector2(773, 111)
+
+[node name="Soul4" parent="." unique_id=432015005 instance=ExtResource("34_e5ybp")]
+position = Vector2(664, 402)
+
+[node name="Soul5" parent="." unique_id=1963669791 instance=ExtResource("34_e5ybp")]
+position = Vector2(1105, 441)
+
+[node name="Owl2" parent="." unique_id=1673551874 instance=ExtResource("owl")]
+position = Vector2(910, 324)
