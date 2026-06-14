@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bdlcrc34v2573"]
+
+[ext_resource type="Script" uid="uid://facc92b" path="res://src/SoulAltar.gd" id="1_altar_script"]
+[ext_resource type="Texture2D" uid="uid://doj78k352gyej" path="res://design/assets/Props/altar 224x288 - standing on grass.png" id="2_altar_texture"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_altar"]
+size = Vector2(80, 50)
+
+[node name="SoulAltar" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_altar_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_altar_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 40)
+shape = SubResource("RectangleShape2D_altar")
