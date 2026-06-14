@@ -551,8 +551,10 @@ gravity = Vector3(0, 98, 0)
 [sub_resource type="CircleShape2D" id="CircleShape2D_pg28d"]
 radius = 14.866069
 
-[node name="Player" type="CharacterBody2D" unique_id=366291153]
+[node name="Player" type="CharacterBody2D" unique_id=366291153 groups=["player"]]
 position = Vector2(36, -47)
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("3_ehvfd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=754453594]
