@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://b7k4tjj3k42jm"]
+[gd_scene format=4 uid="uid://b8n0l4cyns2ag"]
 
 [ext_resource type="Texture2D" uid="uid://cfxl48uyqp21i" path="res://design/assets/Tilesets/Tileset-Terrain-water.png" id="1_o7dey"]
 [ext_resource type="Texture2D" uid="uid://bbhns6m1tygsu" path="res://design/assets/Tilesets/Tileset-Terrain2.png" id="1_vrqf0"]
@@ -1482,7 +1482,7 @@ position = Vector2(521, 154)
 priority = -1
 
 [node name="Player" parent="." unique_id=2121651755 instance=ExtResource("player")]
-position = Vector2(328, 199)
+position = Vector2(108, 45)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1795415994]
 position = Vector2(-112, -41)

@@ -1,17 +1,16 @@
-[gd_scene format=3 uid="uid://bylvp8xetrtm0"]
+[gd_scene format=3 uid="uid://dw1jskucfmha4"]
 
-[ext_resource type="Texture2D" uid="uid://dfchyht8c4e7a" path="res://design/assets/vegetation/Assets/Tree_idol_wolf.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bpdlkpdaolocu" path="res://design/assets/vegetation/Assets/Bush_simple1.png" id="1_ktb8k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(22, 11)
+size = Vector2(19, 20)
 
 [node name="TreeIdolWolf" type="StaticBody2D" unique_id=2061590356 groups=["vegetation"]]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=543251836]
-position = Vector2(4.7683716e-07, -10)
 scale = Vector2(0.6269531, 0.6269531)
-texture = ExtResource("1")
+texture = ExtResource("1_ktb8k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=345178629]
-position = Vector2(1, 5.5)
+position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_1")

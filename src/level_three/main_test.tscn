@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://gm23lhqp7ksq"]
 
 [ext_resource type="Texture2D" uid="uid://bbhns6m1tygsu" path="res://design/assets/Tilesets/Tileset-Terrain2.png" id="1_vrqf0"]
-[ext_resource type="Script" uid="uid://kknorf63cyi5" path="res://src/level_one/ground_fill.gd" id="2_n2gpw"]
+[ext_resource type="Script" uid="uid://kknorf63cyi5" path="res://src/level_three/ground_fill.gd" id="2_n2gpw"]
 [ext_resource type="PackedScene" uid="uid://bssf4hum7irtr" path="res://src/player.tscn" id="3_rbbrk"]
 [ext_resource type="Texture2D" uid="uid://73lxt71pantq" path="res://design/assets/vegetation/Assets/Curved_tree1.png" id="5_xdqfp"]
 [ext_resource type="Texture2D" uid="uid://bmoojfadxrwcv" path="res://design/assets/vegetation/Assets/Curved_tree2.png" id="6_lgqmj"]
