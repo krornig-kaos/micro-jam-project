@@ -84,7 +84,7 @@ collision_layer = 4
 script = ExtResource("1_owl_script")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=988805721]
-scale = Vector2(2, 2)
+scale = Vector2(1.0625, 1.0625)
 sprite_frames = SubResource("SpriteFrames_owl")
 animation = &"fly"
 

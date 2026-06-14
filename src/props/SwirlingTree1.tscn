@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://dmlqtg6edmctx"]
 
 [ext_resource type="Texture2D" uid="uid://bkychbg58o58c" path="res://design/assets/vegetation/Assets/Swirling tree1.png" id="1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(38, 36)
+size = Vector2(40, 39)
 
-[node name="SwirlingTree1" type="StaticBody2D"]
+[node name="SwirlingTree1" type="StaticBody2D" unique_id=1333771336]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1242898417]
 texture = ExtResource("1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 44)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1770250424]
+position = Vector2(5, 27.5)
 shape = SubResource("RectangleShape2D_1")

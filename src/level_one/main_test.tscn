@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://b8n0l4cyns2ag"]
+[gd_scene format=4 uid="uid://gm23lhqp7ksq"]
 
 [ext_resource type="Texture2D" uid="uid://bbhns6m1tygsu" path="res://design/assets/Tilesets/Tileset-Terrain2.png" id="1_vrqf0"]
 [ext_resource type="Script" uid="uid://kknorf63cyi5" path="res://src/level_one/ground_fill.gd" id="2_n2gpw"]

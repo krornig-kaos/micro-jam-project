@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dt5cbphwjeabr"
-path="res://.godot/imported/Tileset-Animated Terrains-8 frames- transparency.png-9dad14f353792b1fa695dd63597c43a9.ctex"
+uid="uid://cfxl48uyqp21i"
+path="res://.godot/imported/Tileset-Terrain-water.png-e5c9a36015a3ed603ffd50510b917ec8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://design/assets/Tilesets/Tileset-Animated Terrains-8 frames- transparency.png"
-dest_files=["res://.godot/imported/Tileset-Animated Terrains-8 frames- transparency.png-9dad14f353792b1fa695dd63597c43a9.ctex"]
+source_file="res://design/assets/Tilesets/Tileset-Terrain-water.png"
+dest_files=["res://.godot/imported/Tileset-Terrain-water.png-e5c9a36015a3ed603ffd50510b917ec8.ctex"]
 
 [params]
 
