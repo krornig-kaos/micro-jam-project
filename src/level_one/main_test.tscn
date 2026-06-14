@@ -1952,16 +1952,17 @@ scale = Vector2(0.46875, 0.46875)
 texture = ExtResource("21_jvran")
 
 [node name="Fox" parent="." unique_id=1078199014 instance=ExtResource("22_n2gpw")]
-position = Vector2(417, 197)
+position = Vector2(351, 184)
 
 [node name="Boar" parent="." unique_id=4323037 instance=ExtResource("22_jao65")]
 position = Vector2(1069, 104)
 
 [node name="Owl" parent="." unique_id=624140609 instance=ExtResource("24_lgqmj")]
 position = Vector2(473, 476)
+explore_cooldown = 10.0
 
 [node name="SoulAltar" parent="." unique_id=491116899 instance=ExtResource("24_xdqfp")]
-position = Vector2(869, 558)
+position = Vector2(892, 146)
 
 [node name="Soul" parent="." unique_id=1089023276 instance=ExtResource("25_lgqmj")]
 position = Vector2(193, 356)
