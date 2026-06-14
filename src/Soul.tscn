@@ -1,18 +1,83 @@
-[gd_scene format=3 uid="uid://cx6i186uw2bgl"]
+[gd_scene format=3 uid="uid://bme1vkb7tiaff"]
 
-[ext_resource type="Script" uid="uid://1df8ddd" path="res://src/Soul.gd" id="1_soul_script"]
-[ext_resource type="Texture2D" uid="uid://crfofqyl3b37n" path="res://design/assets/Props/golden chalice 64x64-spirits.png" id="2_soul_texture"]
+[ext_resource type="Script" path="res://src/Soul.gd" id="1_soul_script"]
+[ext_resource type="Texture2D" uid="uid://dm2ngjgogreo3" path="res://design/assets/Props/golden chalice 64x64-spirits.png" id="2_soul_texture"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_soul"]
 radius = 16.0
 
-[node name="Soul" type="Area2D" groups=["orb"]]
+[sub_resource type="AtlasTexture" id="AtlasTexture_53qnm"]
+atlas = ExtResource("2_soul_texture")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n8hdm"]
+atlas = ExtResource("2_soul_texture")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8oes"]
+atlas = ExtResource("2_soul_texture")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_umpxe"]
+atlas = ExtResource("2_soul_texture")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xla7j"]
+atlas = ExtResource("2_soul_texture")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sot05"]
+atlas = ExtResource("2_soul_texture")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4hmpy"]
+atlas = ExtResource("2_soul_texture")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ys58"]
+atlas = ExtResource("2_soul_texture")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h1di3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53qnm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n8hdm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8oes")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_umpxe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xla7j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sot05")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4hmpy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ys58")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Soul" type="Area2D" unique_id=1089023276 groups=["orb"]]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_soul_script")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_soul_texture")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=184057584]
 shape = SubResource("CircleShape2D_soul")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1974822115]
+sprite_frames = SubResource("SpriteFrames_h1di3")
+frame_progress = 0.13187133

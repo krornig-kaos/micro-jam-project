@@ -20,10 +20,11 @@
 [ext_resource type="Texture2D" uid="uid://bvxcsaj0amqs1" path="res://design/assets/vegetation/Assets/Chanterelles1.png" id="19_txvhk"]
 [ext_resource type="Texture2D" uid="uid://doptr1u7xu7mj" path="res://design/assets/vegetation/Assets/Chanterelles2.png" id="20_1nbnq"]
 [ext_resource type="Texture2D" uid="uid://c8b5aqq70odqi" path="res://design/assets/vegetation/Assets/Chanterelles3.png" id="21_jvran"]
-[ext_resource type="PackedScene" path="res://src/Boar.tscn" id="22_jao65"]
+[ext_resource type="PackedScene" uid="uid://cb5cxlx1pxq7y" path="res://src/Boar.tscn" id="22_jao65"]
 [ext_resource type="PackedScene" uid="uid://brgy235rl7p7" path="res://src/Fox.tscn" id="22_n2gpw"]
-[ext_resource type="Script" uid="uid://oc4vp3bga561" path="res://src/Owl.gd" id="23_xdqfp"]
 [ext_resource type="PackedScene" uid="uid://dsotfbc6r8mxk" path="res://src/Owl.tscn" id="24_lgqmj"]
+[ext_resource type="PackedScene" uid="uid://ds07qstrime8d" path="res://src/SoulAltar.tscn" id="24_xdqfp"]
+[ext_resource type="PackedScene" uid="uid://bme1vkb7tiaff" path="res://src/Soul.tscn" id="25_lgqmj"]
 
 [sub_resource type="TileSetAtlasSource" id="atlas_grass"]
 texture = ExtResource("1_vrqf0")
@@ -1958,3 +1959,18 @@ position = Vector2(1069, 104)
 
 [node name="Owl" parent="." unique_id=624140609 instance=ExtResource("24_lgqmj")]
 position = Vector2(473, 476)
+
+[node name="SoulAltar" parent="." unique_id=491116899 instance=ExtResource("24_xdqfp")]
+position = Vector2(869, 558)
+
+[node name="Soul" parent="." unique_id=1089023276 instance=ExtResource("25_lgqmj")]
+position = Vector2(193, 356)
+
+[node name="Soul2" parent="." unique_id=2050646084 instance=ExtResource("25_lgqmj")]
+position = Vector2(798, 188)
+
+[node name="Soul3" parent="." unique_id=101893065 instance=ExtResource("25_lgqmj")]
+position = Vector2(417, 54)
+
+[node name="Soul4" parent="." unique_id=1509610257 instance=ExtResource("25_lgqmj")]
+position = Vector2(492, 616)
