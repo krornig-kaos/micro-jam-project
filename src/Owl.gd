@@ -108,9 +108,12 @@ func _has_line_of_sight() -> bool:
 	var space_state := get_world_2d().direct_space_state
 	var query := PhysicsRayQueryParameters2D.create(global_position, _player.global_position)
 	query.exclude = [get_rid()]
+	# El búho también colisiona con el terreno (Capa 1) para la línea de visión
 	query.collision_mask = 1 | 2 # Paredes/Obstáculos (1) y Jugador (2)
 	var result := space_state.intersect_ray(query)
 	if result:
+		# Imprimir contra qué chocó para debugear si es necesario
+		# print("Owl ray hit: ", result.collider.name)
 		return result.collider == _player
 	return false
 
