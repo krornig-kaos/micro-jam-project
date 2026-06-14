@@ -27,14 +27,16 @@ var _in_hide_spot: bool = false
 
 # ─── Nodos hijos ───────────────────────────────────────────────────────────────
 @onready var _anim: AnimatedSprite2D      = $AnimatedSprite2D
-@onready var _collision: CollisionShape2D = $CollisionShape2D
 @onready var _pickup_area: Area2D         = $PickupArea
 @onready var _particles: GPUParticles2D   = $GPUParticles2D
 @onready var _intangible_timer: Timer     = $IntangibleTimer
 @onready var _stealth_area: Area2D        = $StealthDetector
+@onready var _collision: CollisionShape2D = $PlayerArea/CollisionShape2D
+@onready var _player_area: Area2D 		  = $PlayerArea
 
 # ─── Godot lifecycle ───────────────────────────────────────────────────────────
 func _ready() -> void:
+	add_to_group("player")
 	_intangible_timer.wait_time = intangible_duration
 	_intangible_timer.one_shot  = true
 	_intangible_timer.timeout.connect(_on_intangible_timeout)
@@ -48,7 +50,7 @@ func _physics_process(_delta: float) -> void:
 
 	var direction := _get_input_direction()
 	var is_sprinting := Input.is_key_pressed(KEY_SHIFT) and direction != Vector2.ZERO
-	var is_stealthing := Input.is_key_pressed(KEY_C) and direction != Vector2.ZERO
+	var is_stealthing := Input.is_key_pressed(KEY_C)
 
 	# Actualizar dirección solo cuando hay movimiento
 	if direction != Vector2.ZERO:
@@ -56,13 +58,16 @@ func _physics_process(_delta: float) -> void:
 
 	# Actualizar estado sigilo
 	if is_stealthing and current_state not in [State.DEAD, State.INTANGIBLE]:
-		current_state = State.STEALTH
-		_particles.emitting = true
+		if current_state != State.STEALTH:
+			current_state = State.STEALTH
+			_particles.emitting = true
+			get_tree().call_group("enemy", "on_player_stealthed", true)
 	elif current_state == State.STEALTH and not is_stealthing:
 		_exit_stealth()
 
 	velocity = direction * _effective_speed(is_sprinting)
 	move_and_slide()
+	_check_collisions()
 	_update_animation(direction, is_sprinting, is_stealthing)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -72,28 +77,27 @@ func _unhandled_input(event: InputEvent) -> void:
 		_activate_intangible()
 
 func _get_input_direction() -> Vector2:
-	# Sin diagonales — el eje con mayor valor gana
 	var raw := Vector2(
 		Input.get_axis("ui_left", "ui_right"),
 		Input.get_axis("ui_up",   "ui_down")
 	)
 	if raw == Vector2.ZERO:
 		return Vector2.ZERO
-	if absf(raw.x) >= absf(raw.y):
-		return Vector2(signf(raw.x), 0.0)
-	else:
-		return Vector2(0.0, signf(raw.y))
+	return raw.normalized()
 
 # ─── Dirección dominante ───────────────────────────────────────────────────────
 func _update_direction(dir: Vector2) -> void:
-	if dir.x > 0.0:
-		current_direction = Direction.RIGHT
-	elif dir.x < 0.0:
-		current_direction = Direction.LEFT
-	elif dir.y < 0.0:
-		current_direction = Direction.UP
-	elif dir.y > 0.0:
-		current_direction = Direction.DOWN
+	# Priorizar la dirección dominante para las animaciones (izquierda, derecha, arriba, abajo)
+	if absf(dir.x) >= absf(dir.y):
+		if dir.x > 0.0:
+			current_direction = Direction.RIGHT
+		elif dir.x < 0.0:
+			current_direction = Direction.LEFT
+	else:
+		if dir.y < 0.0:
+			current_direction = Direction.UP
+		elif dir.y > 0.0:
+			current_direction = Direction.DOWN
 
 # ─── Velocidad efectiva ────────────────────────────────────────────────────────
 func _effective_speed(is_sprinting: bool) -> float:
@@ -108,11 +112,21 @@ func _effective_speed(is_sprinting: bool) -> float:
 			var speed := maxf(min_speed, base_speed - orb_count * speed_penalty_per_orb)
 			return speed * sprint_multiplier if is_sprinting else speed
 
+# ─── Colisiones nativas robustas ───────────────────────────────────────────────
+func _check_collisions() -> void:
+	for i in get_slide_collision_count():
+		var collision := get_slide_collision(i)
+		var collider := collision.get_collider()
+		if collider and collider.is_in_group("enemy"):
+			take_hit()
+
 # ─── Animaciones ───────────────────────────────────────────────────────────────
 func _update_animation(dir: Vector2, is_sprinting: bool, is_stealthing: bool) -> void:
+	if is_dead:
+		return
 	var prefix: String
 	if dir == Vector2.ZERO:
-		prefix = "run"
+		prefix = "run" # Se asume la animación de "idle" o "walk" según el sprite, pero en su spritesheet corre/camina
 	elif is_stealthing:
 		prefix = "stealth"
 	elif is_sprinting:
@@ -142,7 +156,7 @@ func _exit_stealth() -> void:
 	if current_state != State.STEALTH:
 		return
 	_particles.emitting = false
-	get_tree().call_group("enemies", "on_player_stealthed", false)
+	get_tree().call_group("enemy", "on_player_stealthed", false)
 	_update_state()
 
 func _activate_intangible() -> void:
@@ -200,6 +214,7 @@ func die() -> void:
 	_anim.play("death")
 
 func take_hit() -> void:
+	print("Player hit!")
 	if current_state == State.INTANGIBLE:
 		return
 	die()
