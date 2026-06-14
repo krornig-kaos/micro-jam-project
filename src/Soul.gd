@@ -11,7 +11,7 @@ var _player: Node2D = null
 var _initial_position: Vector2
 var _time: float = 0.0
 
-@onready var _sprite: Sprite2D = $Sprite2D
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
 func _ready() -> void:

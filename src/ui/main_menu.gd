@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_SCENE: String = "res://src/game/game_stub.tscn"
+const GAME_SCENE: String = "res://src/level_one/main.tscn"
 const CREDITS_SCENE: String = "res://src/ui/credits_stub.tscn"
 const MENU_START_KEY: String = "MENU_START"
 const MENU_CREDITS_KEY: String = "MENU_CREDITS"
