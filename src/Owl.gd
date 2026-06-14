@@ -38,6 +38,7 @@ var _ring_alpha: float = 1.0
 # ─── Godot lifecycle ───────────────────────────────────────────────────────────
 func _ready() -> void:
 	add_to_group("enemy")
+	add_to_group("non_lethal")
 	_detection.body_entered.connect(_on_detection_entered)
 	_detection.body_exited.connect(_on_detection_exited)
 	
@@ -204,3 +205,16 @@ func on_player_stealthed(is_stealthed: bool) -> void:
 		_alerted = false
 		if _alert_ring:
 			_alert_ring.visible = false
+
+## Llamado cuando el jugador colisiona físicamente con el búho
+func on_player_touched(player_node: Node2D) -> void:
+	if not _alerted and not _player_stealthed:
+		_alerted = true
+		# Reiniciar efecto de onda expansiva
+		_ring_radius = 0.0
+		_ring_alpha = 1.0
+		if _alert_ring:
+			_alert_ring.visible = true
+		
+		print("OWL: Player touched physically! Triggering instant alert.")
+		get_tree().call_group("enemy", "on_player_spotted", player_node.global_position)

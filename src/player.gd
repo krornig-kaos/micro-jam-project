@@ -118,7 +118,11 @@ func _check_collisions() -> void:
 		var collision := get_slide_collision(i)
 		var collider := collision.get_collider()
 		if collider and collider.is_in_group("enemy"):
-			take_hit()
+			if collider.is_in_group("non_lethal"):
+				if collider.has_method("on_player_touched"):
+					collider.on_player_touched(self)
+			else:
+				take_hit()
 
 # ─── Animaciones ───────────────────────────────────────────────────────────────
 func _update_animation(dir: Vector2, is_sprinting: bool, is_stealthing: bool) -> void:
