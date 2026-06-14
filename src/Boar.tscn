@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cb5cxlx1pxq7y"]
 
-[ext_resource type="Script" uid="uid://djwxt8q4g8155" path="res://src/Boar.gd" id="1_boar_script"]
+[ext_resource type="Script" uid="uid://6t6a43kisymg" path="res://src/Boar.gd" id="1_boar_script"]
 [ext_resource type="Texture2D" uid="uid://cg2nkyh3w5f47" path="res://design/assets/characters/Without_shadow/Boar/Boar_Idle.png" id="2_boar_idle"]
 [ext_resource type="Texture2D" uid="uid://b00g10pl1y52" path="res://design/assets/characters/Without_shadow/Boar/Boar_Walk.png" id="3_boar_walk"]
 [ext_resource type="Texture2D" uid="uid://1p1j2u7e0y2o" path="res://design/assets/characters/Without_shadow/Boar/Boar_Run.png" id="4_boar_run"]
