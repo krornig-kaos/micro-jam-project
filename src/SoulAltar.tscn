@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bdlcrc34v2573"]
 
-[ext_resource type="Script" uid="uid://facc92b" path="res://src/SoulAltar.gd" id="1_altar_script"]
+[ext_resource type="Script" uid="uid://bdlcrc34v2573" path="res://src/SoulAltar.gd" id="1_altar_script"]
 [ext_resource type="Texture2D" uid="uid://doj78k352gyej" path="res://design/assets/Props/altar 224x288 - standing on grass.png" id="2_altar_texture"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_altar"]
