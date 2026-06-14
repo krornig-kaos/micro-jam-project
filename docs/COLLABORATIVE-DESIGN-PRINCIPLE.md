@@ -123,16 +123,16 @@ Every agent interaction should follow this pattern:
 9. [REPEAT CYCLE FOR EACH SECTION]
 
 10. FINAL APPROVAL BEFORE WRITING
-    Agent: "The full GDD draft is complete. I've covered:
+	Agent: "The full GDD draft is complete. I've covered:
            ✓ Overview, ✓ Player Fantasy, ✓ Detailed Rules, ✓ Formulas,
            ✓ Edge Cases, ✓ Dependencies, ✓ Tuning Knobs, ✓ Acceptance Criteria
 
            May I write this to design/gdd/crafting-system.md?"
 
-    User: "Yes, write it."  ← ONLY NOW does file get created
+	User: "Yes, write it."  ← ONLY NOW does file get created
 
 11. AGENT WRITES FILE
-    Agent: [Uses Write tool]
+	Agent: [Uses Write tool]
            "Created design/gdd/crafting-system.md. Would you like me to run
             /design-review to validate it against the standard?"
 ```
@@ -377,24 +377,24 @@ After introducing the topic in conversation, batch constrained questions:
 ```
 AskUserQuestion:
   questions:
-    - question: "Should crafting recipes be discovered or learned?"
-      header: "Discovery"
-      options:
-        - label: "Experimentation"
-          description: "Players discover by trying combinations — high mystery"
-        - label: "NPC/Book Learning"
-          description: "Recipes taught explicitly — accessible, lower mystery"
-        - label: "Tiered Hybrid"
-          description: "Basic recipes learned, advanced discovered — best of both"
-    - question: "How punishing should failed crafts be?"
-      header: "Failure"
-      options:
-        - label: "Materials Lost"
-          description: "All consumed on failure — high stakes, risk/reward"
-        - label: "Partial Recovery"
-          description: "50% returned — moderate risk"
-        - label: "No Loss"
-          description: "Materials returned, only time spent — forgiving"
+	- question: "Should crafting recipes be discovered or learned?"
+	  header: "Discovery"
+	  options:
+		- label: "Experimentation"
+		  description: "Players discover by trying combinations — high mystery"
+		- label: "NPC/Book Learning"
+		  description: "Recipes taught explicitly — accessible, lower mystery"
+		- label: "Tiered Hybrid"
+		  description: "Basic recipes learned, advanced discovered — best of both"
+	- question: "How punishing should failed crafts be?"
+	  header: "Failure"
+	  options:
+		- label: "Materials Lost"
+		  description: "All consumed on failure — high stakes, risk/reward"
+		- label: "Partial Recovery"
+		  description: "50% returned — moderate risk"
+		- label: "No Loss"
+		  description: "Materials returned, only time spent — forgiving"
 ```
 
 ### Example — Design Decision (After Full Analysis)
@@ -404,15 +404,15 @@ After writing the full pros/cons analysis in conversation text:
 ```
 AskUserQuestion:
   questions:
-    - question: "Which crafting approach fits your vision?"
-      header: "Approach"
-      options:
-        - label: "Hybrid Discovery (Recommended)"
-          description: "Discovery base with earned hints — balances exploration and accessibility"
-        - label: "Full Discovery"
-          description: "Pure experimentation — maximum mystery, risk of frustration"
-        - label: "Hint System"
-          description: "Progressive hints reveal recipes — accessible but less surprise"
+	- question: "Which crafting approach fits your vision?"
+	  header: "Approach"
+	  options:
+		- label: "Hybrid Discovery (Recommended)"
+		  description: "Discovery base with earned hints — balances exploration and accessibility"
+		- label: "Full Discovery"
+		  description: "Pure experimentation — maximum mystery, risk of frustration"
+		- label: "Hint System"
+		  description: "Progressive hints reveal recipes — accessible but less surprise"
 ```
 
 ### Example — Strategic Decision
@@ -422,15 +422,15 @@ After presenting the full strategic analysis with pillar alignment:
 ```
 AskUserQuestion:
   questions:
-    - question: "How should we handle crafting scope for Alpha?"
-      header: "Scope"
-      options:
-        - label: "Simplify to Core (Recommended)"
-          description: "Recipe discovery only, 10 recipes — makes deadline, pillar visible"
-        - label: "Full Implementation"
-          description: "Complete system, 30 recipes — slips Alpha by 1 week"
-        - label: "Cut Entirely"
-          description: "Drop crafting, focus on combat — deadline met, pillar missing"
+	- question: "How should we handle crafting scope for Alpha?"
+	  header: "Scope"
+	  options:
+		- label: "Simplify to Core (Recommended)"
+		  description: "Recipe discovery only, 10 recipes — makes deadline, pillar visible"
+		- label: "Full Implementation"
+		  description: "Complete system, 30 recipes — slips Alpha by 1 week"
+		- label: "Cut Entirely"
+		  description: "Drop crafting, focus on combat — deadline met, pillar missing"
 ```
 
 ### Team Skill Orchestration
@@ -470,7 +470,7 @@ Every file write must follow:
 
    IF User says "No":
    Agent: [Makes requested changes]
-          [Returns to step 1]
+		  [Returns to step 1]
 ```
 
 ### Incremental Section Writing (Design Documents)

@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://igce0qj51xbu"]
+
+[ext_resource type="Script" uid="uid://bf12qnpmywafs" path="res://src/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="Theme" uid="uid://bo0c2fcdruisx" path="res://src/ui/theme.tres" id="2_theme"]
+[ext_resource type="FontVariation" uid="uid://pe0n3oyfcde1" path="res://design/assets/fonts/Rubik_Microbe.tres" id="3_f0s2b"]
+[ext_resource type="PackedScene" uid="uid://ptygd7sk2u1n" path="res://src/ui/parallax_container.tscn" id="3_ljhhu"]
+[ext_resource type="FontFile" uid="uid://8ie1fov8rxsg" path="res://design/assets/fonts/RubikMicrobe-Regular.ttf" id="4_5mgu5"]
+[ext_resource type="FontFile" uid="uid://bqdl5vpfls8gb" path="res://design/assets/fonts/Underdog/Underdog-Regular.ttf" id="4_h03rr"]
+
+[node name="MainMenu" type="Control" unique_id=1111989849]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_menu")
+
+[node name="ParallaxLayers" parent="." unique_id=530475691 instance=ExtResource("3_ljhhu")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=345118081]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -92.0
+offset_right = 180.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1058723080]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3952, 0.8, 0.06399999, 1)
+theme_override_fonts/font = ExtResource("4_5mgu5")
+theme_override_font_sizes/font_size = 80
+text = "SPIRIT HOP"
+horizontal_alignment = 1
+
+[node name="Container" type="Container" parent="VBoxContainer" unique_id=119575666]
+custom_minimum_size = Vector2(0, 86)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer" unique_id=1109967913]
+custom_minimum_size = Vector2(320, 56)
+layout_mode = 2
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../CreditsButton")
+theme_override_fonts/font = ExtResource("3_f0s2b")
+
+[node name="CreditsButton" type="Button" parent="VBoxContainer" unique_id=1967740840]
+custom_minimum_size = Vector2(320, 56)
+layout_mode = 2
+focus_neighbor_top = NodePath("../StartButton")
+focus_neighbor_bottom = NodePath("../QuitButton")
+theme_override_fonts/font = ExtResource("4_h03rr")
+
+[node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=803958173]
+custom_minimum_size = Vector2(320, 56)
+layout_mode = 2
+focus_neighbor_top = NodePath("../CreditsButton")
+focus_neighbor_bottom = NodePath("../StartButton")
+theme_override_fonts/font = ExtResource("4_h03rr")

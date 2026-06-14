@@ -131,7 +131,17 @@ performance_budgets: []
 # Register an API decision when the choice is non-obvious and other ADRs might
 # make a different choice for the same purpose without knowing this was decided.
 
-api_decisions: []
+  - purpose: scene_transition
+    status: active
+    api: get_tree().change_scene_to_file()
+    not: Custom SceneManager autoload
+    adr: docs/architecture/adr-001-scene-transitions.md
+    reason: "Simplest idiomatic Godot method for 3-4 scenes; avoids unnecessary complexity in early development."
+    referenced_by:
+      - docs/architecture/adr-001-scene-transitions.md
+    added: 2026-06-13
+    revised: ""
+
 
 # Example:
 #

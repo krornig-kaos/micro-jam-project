@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cx6i186uw2bgl"]
+
+[ext_resource type="Script" uid="uid://1df8ddd" path="res://src/Soul.gd" id="1_soul_script"]
+[ext_resource type="Texture2D" uid="uid://crfofqyl3b37n" path="res://design/assets/Props/golden chalice 64x64-spirits.png" id="2_soul_texture"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_soul"]
+radius = 16.0
+
+[node name="Soul" type="Area2D" groups=["orb"]]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_soul_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_soul_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_soul")
