@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ds07qstrime8d"]
 
-[ext_resource type="Script" path="res://src/SoulAltar.gd" id="1_altar_script"]
+[ext_resource type="Script" uid="uid://bdlcrc34v2573" path="res://src/SoulAltar.gd" id="1_altar_script"]
 [ext_resource type="Texture2D" uid="uid://ccur18xyk4yb5" path="res://design/assets/Props/altar 224x288 - standard.png" id="2_3gyfn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_altar"]
@@ -293,9 +293,11 @@ collision_mask = 2
 script = ExtResource("1_altar_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1970177278]
-position = Vector2(0, 40)
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_altar")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=986125458]
+position = Vector2(-5.9604645e-08, 0)
+scale = Vector2(0.6875, 0.6875)
 sprite_frames = SubResource("SpriteFrames_3rgsf")
 frame_progress = 0.051322512

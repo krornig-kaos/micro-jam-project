@@ -21,22 +21,6 @@ region = Rect2(64, 0, 32, 32)
 atlas = ExtResource("2_boar_idle")
 region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_1"]
-atlas = ExtResource("3_boar_walk")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_2"]
-atlas = ExtResource("3_boar_walk")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_3"]
-atlas = ExtResource("3_boar_walk")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_4"]
-atlas = ExtResource("3_boar_walk")
-region = Rect2(96, 0, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_run_1"]
 atlas = ExtResource("4_boar_run")
 region = Rect2(0, 0, 32, 32)
@@ -51,6 +35,22 @@ region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_run_4"]
 atlas = ExtResource("4_boar_run")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_1"]
+atlas = ExtResource("3_boar_walk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_2"]
+atlas = ExtResource("3_boar_walk")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_3"]
+atlas = ExtResource("3_boar_walk")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_4"]
+atlas = ExtResource("3_boar_walk")
 region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_boar"]
@@ -110,21 +110,22 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_boar_phys"]
 radius = 12.0
 
-[node name="Boar" type="CharacterBody2D" groups=["enemy"]]
+[node name="Boar" type="CharacterBody2D" unique_id=2032938678 groups=["enemy"]]
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_boar_script")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(2, 2)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1789845020]
+position = Vector2(-5.9604645e-08, -5.9604645e-08)
+scale = Vector2(1.25, 1.25)
 sprite_frames = SubResource("SpriteFrames_boar")
 animation = &"idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2142343763]
 shape = SubResource("CircleShape2D_boar_phys")
 
-[node name="DetectionArea" type="Area2D" parent="."]
+[node name="DetectionArea" type="Area2D" parent="." unique_id=2072586768]
 collision_mask = 2
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="DetectionArea"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="DetectionArea" unique_id=414850923]
 polygon = PackedVector2Array(0, 0, 100, -45, 100, 45)
