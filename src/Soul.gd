@@ -16,6 +16,12 @@ var _time: float = 0.0
 
 func _ready() -> void:
 	add_to_group("orb")
+	
+	# Hacer que el alma solo sea visible bajo la luz (invisible en sombras)
+	var mat := CanvasItemMaterial.new()
+	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_LIGHT_ONLY
+	_sprite.material = mat
+	
 	_initial_position = global_position
 	body_entered.connect(_on_body_entered)
 

@@ -23,6 +23,9 @@ var _alerted: bool = false
 var _explore_timer: float = 0.0
 var _anchor_position: Vector2
 var _orbit_angle: float = 0.0
+var _investigate_timer: float = 0.0
+var _noise_target: Vector2 = Vector2.ZERO
+var _is_investigating_noise: bool = false
 
 # Variables para la onda expansiva roja
 var _ring_radius: float = 0.0
@@ -39,6 +42,12 @@ var _ring_alpha: float = 1.0
 func _ready() -> void:
 	add_to_group("enemy")
 	add_to_group("non_lethal")
+	
+	# Hacer que el enemigo solo sea visible bajo la luz (invisible en sombras)
+	var mat := CanvasItemMaterial.new()
+	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_LIGHT_ONLY
+	_anim.material = mat
+	
 	_detection.body_entered.connect(_on_detection_entered)
 	_detection.body_exited.connect(_on_detection_exited)
 	
@@ -50,22 +59,45 @@ func _ready() -> void:
 		
 	# Configurar el Line2D del anillo para que dibuje un círculo aproximado si existe
 	if _alert_ring:
+		var ring_mat := CanvasItemMaterial.new()
+		ring_mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		_alert_ring.material = ring_mat
 		_setup_alert_ring()
 	
 	_anim.play("fly")
 
 func _physics_process(delta: float) -> void:
-	# Cooldown de exploración en estado WATCH (solo corre el tiempo si no está alertado)
-	if current_state == State.WATCH and not _alerted:
+	# Detección acústica (Oído del Búho)
+	var player = _get_player_node()
+	if player and not player.is_dead and not _alerted:
+		var dist := global_position.distance_to(player.global_position)
+		if dist <= player.current_noise_radius:
+			# Escuchó ruido: detiene su patrón e investiga girando hacia allí
+			_is_investigating_noise = true
+			_investigate_timer = 2.0
+			_noise_target = player.global_position
+
+	# Cooldown de exploración en estado WATCH (solo corre el tiempo si no está alertado ni investigando ruido)
+	if current_state == State.WATCH and not _alerted and not _is_investigating_noise:
 		_explore_timer += delta
 		if _explore_timer >= explore_cooldown:
 			_start_explore()
 
-	# Si está alertado, enfoca al jugador (tanto en WATCH como en EXPLORE) y congela movimientos
+	# 1. Prioridad 1: Si está alertado (vio al jugador), se enfoca en él
 	if _alerted and _player:
 		var to_player := (_player.global_position - global_position).normalized()
 		global_rotation = lerp_angle(global_rotation, to_player.angle() + PI / 2.0, 10.0 * delta)
 		velocity = Vector2.ZERO
+	# 2. Prioridad 2: Si escuchó ruido, gira a investigar la zona por 2 segundos
+	elif _is_investigating_noise:
+		var to_noise := (_noise_target - global_position).normalized()
+		global_rotation = lerp_angle(global_rotation, to_noise.angle() + PI / 2.0, 8.0 * delta)
+		velocity = Vector2.ZERO
+		
+		_investigate_timer -= delta
+		if _investigate_timer <= 0.0:
+			_is_investigating_noise = false
+	# 3. Prioridad 3: Movimiento y rotación de patrulla normales
 	else:
 		match current_state:
 			State.WATCH:
@@ -75,10 +107,12 @@ func _physics_process(delta: float) -> void:
 			State.EXPLORE:
 				_do_explore(delta)
 
-	# Controlar la alerta basado en línea de visión y cono de visión
-	if _player and not _player_stealthed and _is_player_in_cone() and _has_line_of_sight():
+	# Controlar la alerta basado en línea de visión y cono de visión (solo si el jugador no está en un arbusto)
+	if _player and not _player.is_dead and not _player.is_hidden() and _is_player_in_cone() and _has_line_of_sight():
 		if not _alerted:
 			_alerted = true
+			# Cancelar investigación por ruido ya que hay contacto visual directo
+			_is_investigating_noise = false
 			# Reiniciar efecto de onda expansiva
 			_ring_radius = 0.0
 			_ring_alpha = 1.0
@@ -218,3 +252,9 @@ func on_player_touched(player_node: Node2D) -> void:
 		
 		print("OWL: Player touched physically! Triggering instant alert.")
 		get_tree().call_group("enemy", "on_player_spotted", player_node.global_position)
+
+func _get_player_node() -> Node2D:
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		return players[0]
+	return null

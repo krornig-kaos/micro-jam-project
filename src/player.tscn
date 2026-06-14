@@ -295,7 +295,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hclnh")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 5.0
 }, {
@@ -552,30 +552,24 @@ gravity = Vector3(0, 98, 0)
 radius = 14.866069
 
 [node name="Player" type="CharacterBody2D" unique_id=366291153 groups=["player"]]
-position = Vector2(36, -47)
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("3_ehvfd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=754453594]
-position = Vector2(12, 9)
 shape = SubResource("CapsuleShape2D_rc2ur")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=456348406]
-position = Vector2(14, 6)
 scale = Vector2(1.8125, 1.34375)
 sprite_frames = SubResource("SpriteFrames_21lrq")
 animation = &"death"
 
 [node name="PickupArea" type="Area2D" parent="." unique_id=659996611]
-position = Vector2(39, -2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea" unique_id=1480937912]
-position = Vector2(-26, 10)
 shape = SubResource("CapsuleShape2D_gmfve")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=669179182]
-position = Vector2(48, -6)
 emitting = false
 process_material = SubResource("ParticleProcessMaterial_gmfve")
 
@@ -586,5 +580,4 @@ one_shot = true
 [node name="StealthDetector" type="Area2D" parent="." unique_id=903071206]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StealthDetector" unique_id=41088875]
-position = Vector2(12, 8)
 shape = SubResource("CircleShape2D_pg28d")

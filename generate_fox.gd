@@ -40,5 +40,4 @@ func _init():
     var scene = PackedScene.new()
     scene.pack(root)
     ResourceSaver.save(scene, "res://src/Fox.tscn")
-    print("Fox.tscn created successfully!")
     quit()

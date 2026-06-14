@@ -1788,6 +1788,7 @@ script = ExtResource("2_n2gpw")
 
 [node name="Player" parent="Ground/Ground" unique_id=366291153 instance=ExtResource("3_rbbrk")]
 position = Vector2(112, 47)
+vision_radius = 640.0
 
 [node name="Camera2D" type="Camera2D" parent="Ground/Ground/Player" unique_id=1136147529]
 position = Vector2(-112, -41)
@@ -1952,17 +1953,21 @@ scale = Vector2(0.46875, 0.46875)
 texture = ExtResource("21_jvran")
 
 [node name="Fox" parent="." unique_id=1078199014 instance=ExtResource("22_n2gpw")]
-position = Vector2(351, 184)
+position = Vector2(628, 80)
+patrol_capsule_length = 69.0
+patrol_capsule_radius = 4.0
 
 [node name="Boar" parent="." unique_id=4323037 instance=ExtResource("22_jao65")]
 position = Vector2(1069, 104)
 
 [node name="Owl" parent="." unique_id=624140609 instance=ExtResource("24_lgqmj")]
 position = Vector2(473, 476)
-explore_cooldown = 10.0
+explore_cooldown = 20.0
+patrol_radius = 90.0
+patrol_speed = 127.0
 
 [node name="SoulAltar" parent="." unique_id=491116899 instance=ExtResource("24_xdqfp")]
-position = Vector2(892, 146)
+position = Vector2(1024, 465)
 
 [node name="Soul" parent="." unique_id=1089023276 instance=ExtResource("25_lgqmj")]
 position = Vector2(193, 356)

@@ -5,7 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(62, 59)
 
-[node name="MegaTree1" type="StaticBody2D"]
+[node name="MegaTree1" type="StaticBody2D" groups=["vegetation"]]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(19, -14)

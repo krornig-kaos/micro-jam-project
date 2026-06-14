@@ -1,0 +1,81 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/ui/victory_screen.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://bo0c2fcdruisx" path="res://src/ui/theme.tres" id="2_theme"]
+[ext_resource type="FontFile" uid="uid://8ie1fov8rxsg" path="res://design/assets/fonts/RubikMicrobe-Regular.ttf" id="3_font_title"]
+[ext_resource type="FontFile" uid="uid://bqdl5vpfls8gb" path="res://design/assets/fonts/Underdog/Underdog-Regular.ttf" id="4_font_button"]
+
+[node name="VictoryScreen" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.490196)
+
+[node name="Panel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -180.0
+offset_right = 220.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 30.0
+offset_right = -20.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3952, 0.8, 0.06399999, 1)
+theme_override_fonts/font = ExtResource("3_font_title")
+theme_override_font_sizes/font_size = 48
+text = "¡BOSQUE SALVADO!"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ReplayButton" type="Button" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_font_button")
+theme_override_font_sizes/font_size = 22
+text = "Jugar de Nuevo"
+
+[node name="MenuButton" type="Button" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_font_button")
+theme_override_font_sizes/font_size = 22
+text = "Menú Principal"
