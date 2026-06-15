@@ -51,14 +51,11 @@ func _ready() -> void:
 	_pickup_area.body_entered.connect(_on_pickup_body_entered)
 	_stealth_area.area_entered.connect(_on_hide_spot_entered)
 	_stealth_area.area_exited.connect(_on_hide_spot_exited)
-	
+
 	if _anim:
 		_anim.animation_finished.connect(_on_animation_finished)
-	
-	# Inicializar la luz de visión y la niebla de guerra
+
 	_setup_vision_and_shadows()
-	
-	# Inicializar partículas procedimentales (VFX)
 	_setup_dust_particles()
 	_setup_stealth_particles()
 	_setup_intangible_particles()
@@ -72,11 +69,9 @@ func _physics_process(_delta: float) -> void:
 	var is_sprinting := Input.is_key_pressed(KEY_SHIFT) and direction != Vector2.ZERO
 	var is_stealthing := Input.is_key_pressed(KEY_C)
 
-	# Actualizar dirección solo cuando hay movimiento
 	if direction != Vector2.ZERO:
 		_update_direction(direction)
 
-	# Actualizar estado sigilo (Manual con C, o automático al estar en escondite/arbusto)
 	var needs_stealth := is_stealthing or _in_hide_spot
 	if needs_stealth and current_state not in [State.DEAD, State.INTANGIBLE]:
 		if current_state != State.STEALTH:
@@ -87,7 +82,6 @@ func _physics_process(_delta: float) -> void:
 	elif current_state == State.STEALTH and not needs_stealth:
 		_exit_stealth()
 
-	# Calcular emisión de ruido dinámica
 	if direction == Vector2.ZERO or is_stealthing:
 		current_noise_radius = 0.0
 	elif is_sprinting:
@@ -97,10 +91,12 @@ func _physics_process(_delta: float) -> void:
 
 	velocity = direction * _effective_speed(is_sprinting)
 	move_and_slide()
+	# Limitar al player dentro de los bordes del mundo
+	global_position.x = clampf(global_position.x, 0.0, 1152.0)
+	global_position.y = clampf(global_position.y, 0.0, 648.0)
 	_check_collisions()
 	_update_animation(direction, is_sprinting, is_stealthing or _in_hide_spot)
 
-	# Controlar partículas de polvo de pasos (no emite polvo al estar oculto o agachado)
 	if _dust_particles:
 		var is_moving := velocity.length_squared() > 10.0
 		_dust_particles.emitting = is_moving and current_state != State.STEALTH
@@ -108,7 +104,6 @@ func _physics_process(_delta: float) -> void:
 			_dust_particles.amount = 12 if is_sprinting else 6
 			_dust_particles.speed_scale = 1.5 if is_sprinting else 1.0
 
-	# Actualizar opacidad visual de feedback (oculto en arbusto, intangible o normal)
 	if is_hidden():
 		modulate.a = 0.55
 	elif current_state == State.INTANGIBLE:
@@ -133,7 +128,6 @@ func _get_input_direction() -> Vector2:
 
 # ─── Dirección dominante ───────────────────────────────────────────────────────
 func _update_direction(dir: Vector2) -> void:
-	# Priorizar la dirección dominante para las animaciones (izquierda, derecha, arriba, abajo)
 	if absf(dir.x) >= absf(dir.y):
 		if dir.x > 0.0:
 			current_direction = Direction.RIGHT
@@ -168,20 +162,26 @@ func _check_collisions() -> void:
 				if collider.has_method("on_player_touched"):
 					collider.on_player_touched(self)
 			else:
+				# No recibir daño si el player está en sigilo o escondido
+				if current_state == State.STEALTH or _in_hide_spot:
+					continue
 				take_hit()
 
 # ─── Animaciones ───────────────────────────────────────────────────────────────
 func _update_animation(dir: Vector2, is_sprinting: bool, is_stealthing: bool) -> void:
 	if is_dead:
 		return
+
 	var prefix: String
-	if dir == Vector2.ZERO:
-		prefix = "run" # Se asume la animación de "idle" o "walk" según el sprite, pero en su spritesheet corre/camina
-	elif is_stealthing:
+
+	if is_stealthing:
+		# En sigilo siempre usa stealth_*, se mueva o no
 		prefix = "stealth"
-	elif is_sprinting:
-		prefix = "run"
+	elif dir == Vector2.ZERO:
+		# Sin input de movimiento → idle
+		prefix = "idle"
 	else:
+		# Moviéndose (sprint o walk usan el mismo set run_*)
 		prefix = "run"
 
 	var suffix: String
@@ -191,7 +191,10 @@ func _update_animation(dir: Vector2, is_sprinting: bool, is_stealthing: bool) ->
 		Direction.LEFT:  suffix = "_left"
 		Direction.RIGHT: suffix = "_right"
 
-	_anim.play(prefix + suffix)
+	var anim_name := prefix + suffix
+	# Evitar reiniciar la animación si ya está reproduciendo la misma
+	if _anim.animation != anim_name:
+		_anim.play(anim_name)
 
 # ─── Gestión de estados ────────────────────────────────────────────────────────
 func _update_state() -> void:
@@ -242,10 +245,7 @@ func _on_pickup_body_entered(body: Node) -> void:
 func deliver_souls() -> void:
 	if orb_count == 0:
 		return
-	
-	# Notificar a las almas del grupo que sigan al jugador para que se consuman
 	get_tree().call_group("orb", "consume_delivered", self)
-	
 	souls_delivered.emit(orb_count)
 	orb_count = 0
 	_update_state()
@@ -254,7 +254,6 @@ func deliver_souls() -> void:
 func _on_hide_spot_entered(area: Area2D) -> void:
 	if area.is_in_group("hide_spot"):
 		_in_hide_spot = true
-		# Ráfaga de hojas al entrar en el arbusto/escondite
 		if _puff_particles:
 			_puff_particles.restart()
 			_puff_particles.emitting = true
@@ -262,12 +261,10 @@ func _on_hide_spot_entered(area: Area2D) -> void:
 func _on_hide_spot_exited(area: Area2D) -> void:
 	if area.is_in_group("hide_spot"):
 		_in_hide_spot = false
-		# Ráfaga de hojas al salir del arbusto/escondite
 		if _puff_particles:
 			_puff_particles.restart()
 			_puff_particles.emitting = true
 
-## Devuelve true si el player está oculto en un escondite/arbusto
 func is_hidden() -> bool:
 	return _in_hide_spot
 
@@ -283,11 +280,9 @@ func die() -> void:
 
 func _on_animation_finished() -> void:
 	if _anim and _anim.animation == "death":
-		# Instanciar pantalla de Game Over
 		var game_over_scene := load("res://src/ui/game_over.tscn")
 		if game_over_scene:
 			var game_over_instance = game_over_scene.instantiate()
-			# Añadir a la escena raíz actual
 			get_tree().current_scene.add_child(game_over_instance)
 			get_tree().paused = true
 
@@ -301,15 +296,13 @@ func take_hit() -> void:
 
 # ─── Configuración de Luz y Sombras (Niebla de Guerra) ─────────────────────────
 func _setup_vision_and_shadows() -> void:
-	# 1. Crear e instanciar la luz de visión
 	_vision_light = PointLight2D.new()
-	
-	# Generar textura radial plana programáticamente con un tono más suave (menos brillante)
+
 	var gradient := Gradient.new()
 	gradient.offsets = [0.0, 0.95, 1.0]
 	var light_color := Color(0.7, 0.7, 0.7)
 	gradient.colors = [light_color, light_color, Color(light_color.r, light_color.g, light_color.b, 0.0)]
-	
+
 	var grad_texture := GradientTexture2D.new()
 	grad_texture.fill = GradientTexture2D.FILL_RADIAL
 	grad_texture.fill_from = Vector2(0.5, 0.5)
@@ -317,17 +310,14 @@ func _setup_vision_and_shadows() -> void:
 	grad_texture.gradient = gradient
 	grad_texture.width = 512
 	grad_texture.height = 512
-	
+
 	_vision_light.texture = grad_texture
 	var scale_factor := (vision_radius * 2.0) / 512.0
 	_vision_light.texture_scale = scale_factor
 	_vision_light.shadow_enabled = true
 	_vision_light.shadow_filter = PointLight2D.SHADOW_FILTER_PCF5
-	
-	add_child(_vision_light)
 
-	# 2. Oscurecer el entorno del nivel con un CanvasModulate
-	# Se usa call_deferred para esperar a que la escena esté completamente lista
+	add_child(_vision_light)
 	call_deferred("_add_canvas_modulator")
 
 func _add_canvas_modulator() -> void:
@@ -337,11 +327,9 @@ func _add_canvas_modulator() -> void:
 		if not modulator:
 			modulator = CanvasModulate.new()
 			modulator.name = "CanvasModulate"
-			# Oscuridad moderada para mantener el mapa visible
 			modulator.color = Color(0.55, 0.55, 0.55)
 			parent.add_child(modulator)
-			
-		# Añadir oclusores de luz a todos los StaticBody2D de forma recursiva
+
 		var level_root = get_tree().current_scene
 		if level_root:
 			_add_shadow_occluders_to_scene(level_root)
@@ -355,23 +343,22 @@ func _add_shadow_occluders_to_scene(node: Node) -> void:
 		_add_shadow_occluders_to_scene(child)
 
 func _add_occluder_to_body(body: StaticBody2D) -> void:
-	# Evitar duplicar oclusores
 	for child in body.get_children():
 		if child is LightOccluder2D:
 			return
-			
+
 	var col_shape: CollisionShape2D = null
 	for child in body.get_children():
 		if child is CollisionShape2D:
 			col_shape = child
 			break
-			
+
 	if not col_shape or not col_shape.shape:
 		return
-		
+
 	var shape = col_shape.shape
 	var points: PackedVector2Array = []
-	
+
 	if shape is RectangleShape2D:
 		var size = shape.size
 		var half_x = size.x / 2.0
@@ -399,7 +386,7 @@ func _add_occluder_to_body(body: StaticBody2D) -> void:
 			Vector2(half_x, half_y),
 			Vector2(-half_x, half_y)
 		])
-		
+
 	if points.size() > 0:
 		var occluder := LightOccluder2D.new()
 		var poly := OccluderPolygon2D.new()
@@ -409,23 +396,20 @@ func _add_occluder_to_body(body: StaticBody2D) -> void:
 		body.add_child(occluder)
 
 func _add_hidespot_to_sprite(sprite: Sprite2D) -> void:
-	# 1. Verificar si ya tiene un escondite en sus hijos
 	for child in sprite.get_children():
 		if child.is_in_group("hide_spot"):
 			return
-			
-	# 2. Identificar si es vegetación tipo arbusto/planta/hongo (Chanterelles, Mushroom)
+
 	var is_hiding_spot := false
 	var lower_name := sprite.name.to_lower()
 	for keyword in ["chanterelles", "mushroom", "bush"]:
 		if keyword in lower_name:
 			is_hiding_spot = true
 			break
-			
+
 	if not is_hiding_spot:
 		return
-		
-	# 3. Instanciar HideSpot.tscn dinámicamente
+
 	var hide_spot_scene := load("res://src/props/HideSpot.tscn")
 	if hide_spot_scene:
 		var hide_spot = hide_spot_scene.instantiate()
@@ -436,39 +420,28 @@ func _setup_dust_particles() -> void:
 	_dust_particles = CPUParticles2D.new()
 	_dust_particles.amount = 6
 	_dust_particles.lifetime = 0.4
-	_dust_particles.local_coords = false # Para crear una estela de polvo detrás del jugador
-	
-	# Posicionar el emisor en los pies del jugador
+	_dust_particles.local_coords = false
 	_dust_particles.position = Vector2(12, 24)
-	
-	# Configuración de emisión
 	_dust_particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
 	_dust_particles.emission_rect_extents = Vector2(6.0, 2.0)
-	
-	# Lanzar el polvo sutilmente hacia arriba y atrás
 	_dust_particles.direction = Vector2(0.0, -1.0)
 	_dust_particles.spread = 45.0
 	_dust_particles.gravity = Vector2(0.0, -15.0)
 	_dust_particles.initial_velocity_min = 5.0
 	_dust_particles.initial_velocity_max = 12.0
-	
-	# Escala y desvanecimiento
 	_dust_particles.scale_amount_min = 2.0
 	_dust_particles.scale_amount_max = 5.0
-	
-	# Color: Gris tierra/marrón desaturado semi-transparente
 	_dust_particles.color = Color(0.65, 0.58, 0.5, 0.35)
-	
+
 	var color_ramp := Gradient.new()
 	color_ramp.offsets = [0.0, 1.0]
 	color_ramp.colors = [Color(0.65, 0.58, 0.5, 0.35), Color(0.65, 0.58, 0.5, 0.0)]
 	_dust_particles.color_ramp = color_ramp
-	
-	# El polvo se ve afectado por la iluminación global/luz de visión
+
 	var mat := CanvasItemMaterial.new()
 	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_NORMAL
 	_dust_particles.material = mat
-	
+
 	add_child(_dust_particles)
 
 func _setup_stealth_particles() -> void:
@@ -485,20 +458,17 @@ func _setup_stealth_particles() -> void:
 	_stealth_particles.initial_velocity_max = 12.0
 	_stealth_particles.scale_amount_min = 3.0
 	_stealth_particles.scale_amount_max = 5.0
-	
-	# Color: Verde hojas/bosque suave
 	_stealth_particles.color = Color(0.3, 0.7, 0.2, 0.4)
-	
+
 	var color_ramp := Gradient.new()
 	color_ramp.offsets = [0.0, 1.0]
 	color_ramp.colors = [Color(0.3, 0.7, 0.2, 0.4), Color(0.3, 0.7, 0.2, 0.0)]
 	_stealth_particles.color_ramp = color_ramp
-	
-	# Brilla ligeramente en la oscuridad
+
 	var p_mat := CanvasItemMaterial.new()
 	p_mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	_stealth_particles.material = p_mat
-	
+
 	add_child(_stealth_particles)
 
 func _setup_intangible_particles() -> void:
@@ -515,19 +485,17 @@ func _setup_intangible_particles() -> void:
 	_intangible_particles.initial_velocity_max = 25.0
 	_intangible_particles.scale_amount_min = 2.0
 	_intangible_particles.scale_amount_max = 4.0
-	
-	# Color: Celeste mágico brillante
 	_intangible_particles.color = Color(0.4, 0.9, 1.0, 0.7)
-	
+
 	var color_ramp := Gradient.new()
 	color_ramp.offsets = [0.0, 1.0]
 	color_ramp.colors = [Color(0.4, 0.9, 1.0, 0.7), Color(0.4, 0.9, 1.0, 0.0)]
 	_intangible_particles.color_ramp = color_ramp
-	
+
 	var p_mat := CanvasItemMaterial.new()
 	p_mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	_intangible_particles.material = p_mat
-	
+
 	add_child(_intangible_particles)
 
 func _setup_puff_particles() -> void:
@@ -546,17 +514,15 @@ func _setup_puff_particles() -> void:
 	_puff_particles.initial_velocity_max = 50.0
 	_puff_particles.scale_amount_min = 3.0
 	_puff_particles.scale_amount_max = 6.0
-	
-	# Color: Hojas verdes combinadas
 	_puff_particles.color = Color(0.2, 0.6, 0.15, 0.6)
-	
+
 	var color_ramp := Gradient.new()
 	color_ramp.offsets = [0.0, 1.0]
 	color_ramp.colors = [Color(0.2, 0.6, 0.15, 0.6), Color(0.2, 0.6, 0.15, 0.0)]
 	_puff_particles.color_ramp = color_ramp
-	
+
 	var p_mat := CanvasItemMaterial.new()
 	p_mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	_puff_particles.material = p_mat
-	
+
 	add_child(_puff_particles)
