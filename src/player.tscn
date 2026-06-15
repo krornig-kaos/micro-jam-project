@@ -527,7 +527,6 @@ position = Vector2(1, 0)
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("3_ehvfd")
-base_speed = 180.0
 sprint_multiplier = 1.5
 speed_penalty_per_orb = 30.0
 vision_radius = 440.0

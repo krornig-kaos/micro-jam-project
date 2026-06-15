@@ -23,20 +23,21 @@ const SOUNDS = {
 	"player_death": "res://assets/audio/player/death.flac"
 }
 
-## Reproduce un efecto de sonido en una posición 2D.
+## Reproduce un efecto de sonido en una posición 2D y devuelve el nodo.
 ## [param sound_name] Nombre clave en el diccionario SOUNDS.
 ## [param position] Posición global donde debe sonar.
 ## [param volume_db] Ajuste de volumen opcional.
 ## [param pitch_min] Variación mínima de tono.
 ## [param pitch_max] Variación máxima de tono.
-func play_sfx(sound_name: String, position: Vector2 = Vector2.ZERO, volume_db: float = 0.0, pitch_min: float = 0.9, pitch_max: float = 1.1) -> void:
+## [param max_distance] Distancia máxima a la que se puede escuchar (atenuación).
+func play_sfx(sound_name: String, position: Vector2 = Vector2.ZERO, volume_db: float = 0.0, pitch_min: float = 0.9, pitch_max: float = 1.1, max_distance: float = 600.0) -> AudioStreamPlayer2D:
 	if not SOUNDS.has(sound_name):
 		push_warning("AudioManager: Sonido no encontrado: " + sound_name)
-		return
+		return null
 		
 	var stream = load(SOUNDS[sound_name])
 	if not stream:
-		return
+		return null
 		
 	var player = AudioStreamPlayer2D.new()
 	player.stream = stream
@@ -45,11 +46,29 @@ func play_sfx(sound_name: String, position: Vector2 = Vector2.ZERO, volume_db: f
 	player.pitch_scale = randf_range(pitch_min, pitch_max)
 	player.global_position = position
 	
+	# Configuración de atenuación 2D
+	player.max_distance = max_distance
+	player.attenuation = 2.0 # Caída logarítmica (más natural)
+	
 	add_child(player)
 	player.play()
 	
 	# Liberar el nodo automáticamente al terminar
 	player.finished.connect(player.queue_free)
+	return player
+
+## Detiene un sonido suavemente con un fade-out.
+func stop_sfx(player: Node, fade_time: float = 0.1) -> void:
+	if not is_instance_valid(player) or not player is AudioStreamPlayer2D and not player is AudioStreamPlayer:
+		return
+		
+	if fade_time <= 0.0:
+		player.stop()
+		player.queue_free()
+	else:
+		var tween = create_tween()
+		tween.tween_property(player, "volume_db", -80.0, fade_time)
+		tween.finished.connect(player.queue_free)
 
 ## Reproduce un sonido que no depende de la posición (UI o efectos globales).
 func play_ui_sfx(sound_name: String, volume_db: float = 0.0) -> void:

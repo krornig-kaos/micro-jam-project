@@ -2,6 +2,12 @@
 ## Si falla la embestida o golpea un obstáculo, se queda aturdido brevemente.
 extends CharacterBody2D
 
+# ─── Señales ───────────────────────────────────────────────────────────────────
+signal charging
+signal stunned
+signal footstep_heavy
+signal grunt
+
 @export var patrol_speed: float = 60.0
 @export var charge_speed: float = 260.0
 @export var detection_radius: float = 100.0
@@ -23,8 +29,22 @@ var _charge_direction: Vector2 = Vector2.ZERO
 @onready var _anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var _detection: Area2D = $DetectionArea
 
+var _charge_sound_node: AudioStreamPlayer2D = null
+
 func _ready() -> void:
 	add_to_group("enemy")
+	
+	# Conectar señales de audio
+	charging.connect(func(): _charge_sound_node = AudioManager.play_sfx("boar_charge", global_position, 0.0, 0.9, 1.1, 900.0))
+	stunned.connect(func(): 
+		AudioManager.play_sfx("boar_stun", global_position, 0.0, 0.9, 1.1, 500.0)
+		if _charge_sound_node:
+			AudioManager.stop_sfx(_charge_sound_node)
+			_charge_sound_node = null
+	)
+	footstep_heavy.connect(func(): AudioManager.play_sfx("boar_gallop", global_position, -2.0, 0.8, 1.0, 450.0))
+	grunt.connect(func(): AudioManager.play_sfx("boar_patrol", global_position, -4.0, 0.9, 1.1, 400.0))
+	
 	var mat := CanvasItemMaterial.new()
 	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_LIGHT_ONLY
 	material = mat
@@ -32,6 +52,9 @@ func _ready() -> void:
 	_detection.body_entered.connect(_on_detection_entered)
 	_detection.body_exited.connect(_on_detection_exited)
 	_patrol_center = global_position
+
+var _grunt_timer: float = 0.0
+var _footstep_timer: float = 0.0
 
 func _physics_process(delta: float) -> void:
 	# Si el player está muerto, volver a patrullar limpiamente
@@ -51,6 +74,13 @@ func _physics_process(delta: float) -> void:
 	match current_state:
 		State.PATROL:
 			_do_patrol()
+			
+			# Gruñidos aleatorios en patrulla
+			_grunt_timer -= delta
+			if _grunt_timer <= 0.0:
+				grunt.emit()
+				_grunt_timer = randf_range(3.0, 7.0)
+				
 			# Detección visual — ignorar si está en sigilo u oculto
 			if _player and not _player.is_dead and not _player.is_hidden() and not _player_stealthed and _has_line_of_sight():
 				_start_windup()
@@ -72,14 +102,24 @@ func _physics_process(delta: float) -> void:
 				_start_charge()
 		State.CHARGE:
 			_do_charge(delta)
+			
+			# Pasos pesados al cargar
+			_footstep_timer -= delta
+			if _footstep_timer <= 0.0:
+				footstep_heavy.emit()
+				_footstep_timer = 0.2
 		State.STUN:
 			velocity = Vector2.ZERO
 			_play_animation("idle", Vector2.ZERO)
 			modulate.g = 0.5
 			modulate.b = 0.5
-			if _state_timer <= 0.0:
-				modulate = Color.WHITE
-				current_state = State.PATROL
+	if _state_timer <= 0.0:
+		modulate = Color.WHITE
+		current_state = State.PATROL
+		if _charge_sound_node:
+			AudioManager.stop_sfx(_charge_sound_node)
+			_charge_sound_node = null
+
 
 	if velocity.length_squared() > 10.0:
 		_detection.rotation = velocity.angle()
@@ -130,6 +170,7 @@ func _start_windup() -> void:
 func _start_charge() -> void:
 	current_state = State.CHARGE
 	_state_timer = charge_duration
+	charging.emit()
 	if _player:
 		_charge_direction = (_player.global_position - global_position).normalized()
 
@@ -157,6 +198,7 @@ func _trigger_stun() -> void:
 	current_state = State.STUN
 	_state_timer = stun_duration
 	velocity = Vector2.ZERO
+	stunned.emit()
 
 func _check_collisions() -> void:
 	# En sigilo el jabalí no daña al player aunque lo toque

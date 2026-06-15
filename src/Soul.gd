@@ -2,6 +2,8 @@
 ## Al ser recogida sigue al player y reduce su velocidad.
 extends Area2D
 
+signal soul_collected
+
 @export var float_speed: float = 2.0
 @export var float_amplitude: float = 5.0
 @export var follow_speed: float = 8.0
@@ -16,6 +18,9 @@ var _time: float = 0.0
 
 func _ready() -> void:
 	add_to_group("orb")
+	
+	# Conectar señal de audio
+	soul_collected.connect(func(): AudioManager.play_sfx("soul_pickup", global_position))
 	
 	# Hacer que el alma solo sea visible bajo la luz (invisible en sombras)
 	var mat := CanvasItemMaterial.new()
@@ -44,6 +49,7 @@ func _process(delta: float) -> void:
 func collect(player: Node2D) -> void:
 	_collected = true
 	_player = player
+	soul_collected.emit()
 	_collision.set_deferred("disabled", true)
 	# Efecto visual: el alma se vuelve más pequeña y semitransparente
 	var tween := create_tween()

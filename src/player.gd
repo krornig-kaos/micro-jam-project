@@ -6,6 +6,9 @@ extends CharacterBody2D
 signal orb_collected(total: int)
 signal player_died
 signal souls_delivered(amount: int)
+signal footstep
+signal stealth_toggled(is_on: bool)
+signal intangible_activated
 
 # ─── Exportables ───────────────────────────────────────────────────────────────
 @export var base_speed: float = 200.0
@@ -42,9 +45,25 @@ var _puff_particles: CPUParticles2D = null
 @onready var _stealth_area: Area2D        = $StealthDetector
 @onready var _collision: CollisionShape2D = $CollisionShape2D
 
+var _intangible_sound_node: AudioStreamPlayer2D = null
+
+var _footstep_timer: float = 0.0
+
 # ─── Godot lifecycle ───────────────────────────────────────────────────────────
 func _ready() -> void:
 	add_to_group("player")
+	
+	# Conectar señales de audio al AudioManager
+	footstep.connect(func(): AudioManager.play_sfx("player_footsteps", global_position, -5.0))
+	stealth_toggled.connect(func(is_on): if is_on: AudioManager.play_sfx("stealth_on", global_position))
+	intangible_activated.connect(func(): _intangible_sound_node = AudioManager.play_sfx("intangible_cast", global_position))
+	player_died.connect(func(): 
+		AudioManager.play_sfx("player_death", global_position)
+		if _intangible_sound_node:
+			AudioManager.stop_sfx(_intangible_sound_node)
+			_intangible_sound_node = null
+	)
+	
 	_intangible_timer.wait_time = intangible_duration
 	_intangible_timer.one_shot  = true
 	_intangible_timer.timeout.connect(_on_intangible_timeout)
@@ -76,6 +95,7 @@ func _physics_process(_delta: float) -> void:
 	if needs_stealth and current_state not in [State.DEAD, State.INTANGIBLE]:
 		if current_state != State.STEALTH:
 			current_state = State.STEALTH
+			stealth_toggled.emit(true)
 			if _stealth_particles:
 				_stealth_particles.emitting = true
 			get_tree().call_group("enemy", "on_player_stealthed", true)
@@ -91,6 +111,17 @@ func _physics_process(_delta: float) -> void:
 
 	velocity = direction * _effective_speed(is_sprinting)
 	move_and_slide()
+	
+	# Emitir pasos
+	if velocity.length() > 10.0 and current_state != State.STEALTH:
+		_footstep_timer -= _delta
+		if _footstep_timer <= 0.0:
+			footstep.emit()
+			# El intervalo depende de si corre o camina
+			_footstep_timer = 0.25 if is_sprinting else 0.4
+	else:
+		_footstep_timer = 0.0
+
 	# Limitar al player dentro de los bordes del mundo
 	global_position.x = clampf(global_position.x, 0.0, 1152.0)
 	global_position.y = clampf(global_position.y, 0.0, 648.0)
@@ -209,6 +240,7 @@ func _exit_stealth() -> void:
 	if current_state != State.STEALTH:
 		return
 	current_state = State.NORMAL
+	stealth_toggled.emit(false)
 	if _stealth_particles:
 		_stealth_particles.emitting = false
 	get_tree().call_group("enemy", "on_player_stealthed", false)
@@ -218,6 +250,7 @@ func _activate_intangible() -> void:
 	if current_state in [State.DEAD, State.INTANGIBLE]:
 		return
 	current_state = State.INTANGIBLE
+	intangible_activated.emit()
 	_collision.set_deferred("disabled", true)
 	modulate.a = 0.45
 	if _intangible_particles:
@@ -229,6 +262,9 @@ func _on_intangible_timeout() -> void:
 	modulate.a = 1.0
 	if _intangible_particles:
 		_intangible_particles.emitting = false
+	if _intangible_sound_node:
+		AudioManager.stop_sfx(_intangible_sound_node)
+		_intangible_sound_node = null
 	current_state = State.NORMAL
 	_update_state()
 
@@ -254,6 +290,7 @@ func deliver_souls() -> void:
 func _on_hide_spot_entered(area: Area2D) -> void:
 	if area.is_in_group("hide_spot"):
 		_in_hide_spot = true
+		AudioManager.play_sfx("bush_rustle", global_position)
 		if _puff_particles:
 			_puff_particles.restart()
 			_puff_particles.emitting = true

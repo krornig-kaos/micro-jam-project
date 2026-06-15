@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://c18do58julplo"]
+[gd_scene format=3 uid="uid://bl870ujqyqga8"]
 
 [ext_resource type="Texture2D" uid="uid://73lxt71pantq" path="res://design/assets/vegetation/Assets/Curved_tree1.png" id="1"]
 
@@ -6,6 +6,7 @@
 radius = 22.022715
 
 [node name="CurvedTree1" type="StaticBody2D" unique_id=1993458051 groups=["vegetation"]]
+collision_mask = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=631537174]
 texture = ExtResource("1")

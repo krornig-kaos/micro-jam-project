@@ -13,6 +13,7 @@ func _on_body_entered(body: Node) -> void:
 		if body.has_method("_activate_intangible"):
 			body.call("_activate_intangible")
 			
-			# Efecto visual y de sonido provisional al recoger
-			# (El item desaparece del mapa)
+			# Sonido de recogida
+			AudioManager.play_sfx("soul_pickup", global_position, 5.0, 1.2, 1.4)
+			
 			queue_free()

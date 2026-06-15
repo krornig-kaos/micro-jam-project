@@ -4,6 +4,11 @@
 ## que alerta a los enemigos cercanos (Jabalíes y Zorros).
 extends CharacterBody2D
 
+# ─── Señales ───────────────────────────────────────────────────────────────────
+signal hooted
+signal screeched
+signal flapped
+
 # ─── Exportables ───────────────────────────────────────────────────────────────
 @export var rotation_speed: float = 45.0
 @export var detection_radius: float = 250.0
@@ -31,6 +36,9 @@ var _ring_radius: float = 0.0
 var _ring_max_radius: float = 40.0
 var _ring_alpha: float = 1.0
 
+var _hoot_timer: float = 0.0
+var _flap_timer: float = 0.0
+
 # ─── Nodos hijos ───────────────────────────────────────────────────────────────
 @onready var _anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var _detection: Area2D = $DetectionArea
@@ -41,7 +49,12 @@ var _ring_alpha: float = 1.0
 func _ready() -> void:
 	add_to_group("enemy")
 	add_to_group("non_lethal")
-
+	
+	# Conectar señales de audio
+	hooted.connect(func(): AudioManager.play_sfx("owl_hoot", global_position, -2.0, 0.9, 1.1, 1000.0))
+	screeched.connect(func(): AudioManager.play_sfx("owl_screech", global_position, 0.0, 1.0, 1.0, 1200.0))
+	flapped.connect(func(): AudioManager.play_sfx("owl_flaps", global_position, -3.0, 0.8, 1.0, 400.0))
+	
 	var mat := CanvasItemMaterial.new()
 	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_LIGHT_ONLY
 	material = mat
@@ -74,6 +87,13 @@ func _physics_process(delta: float) -> void:
 	# Cooldown de exploración
 	if current_state == State.WATCH and not _alerted and not _is_investigating_noise:
 		_explore_timer += delta
+		
+		# Ulular aleatorio
+		_hoot_timer -= delta
+		if _hoot_timer <= 0.0:
+			hooted.emit()
+			_hoot_timer = randf_range(10.0, 25.0)
+			
 		if _explore_timer >= explore_cooldown:
 			_start_explore()
 
@@ -98,11 +118,18 @@ func _physics_process(delta: float) -> void:
 				global_rotation += deg_to_rad(rotation_speed) * delta
 			State.EXPLORE:
 				_do_explore(delta)
+				
+				# Sonido de aleteo rítmico
+				_flap_timer -= delta
+				if _flap_timer <= 0.0:
+					flapped.emit()
+					_flap_timer = 0.6
 
 	# Detección visual — ignorar si en sigilo u oculto
 	if _player and not _player.is_dead and not _player.is_hidden() and not _player_stealthed and _is_player_in_cone() and _has_line_of_sight():
 		if not _alerted:
 			_alerted = true
+			screeched.emit()
 			_is_investigating_noise = false
 			_ring_radius = 0.0
 			_ring_alpha = 1.0

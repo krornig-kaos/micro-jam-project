@@ -19,6 +19,9 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	animals_revived.connect(_on_animals_revived)
 	
+	# Conectar sonido de liberación
+	animals_revived.connect(func(_count): AudioManager.play_sfx("altar_release", global_position))
+	
 	# Inicializar niebla de color / desaturador post-procesado
 	call_deferred("_setup_color_filter")
 
