@@ -72,7 +72,7 @@ theme_override_fonts/font = ExtResource("4_font_button")
 theme_override_font_sizes/font_size = 18
 text = "The forest has lost its color. Collect the lost souls and bring them back to the Ancient Altar to restore life. 
 
-Be careful: the guardians of the void are watching."
+Crouch with 'C' to move silently, or hide in bushes to become invisible to the guardians."
 autowrap_mode = 3
 
 [node name="ControlsSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
@@ -124,7 +124,7 @@ text = "Stealth:"
 [node name="StealthKeys" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/ControlsSection/Grid"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_font_button")
-text = "Hold C / Hide in Bushes"
+text = "Hold C (Quiet) / Hide in Bushes (Invisible)"
 
 [node name="AbilityLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/ControlsSection/Grid"]
 layout_mode = 2
