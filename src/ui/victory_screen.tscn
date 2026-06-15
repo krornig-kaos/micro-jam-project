@@ -59,23 +59,30 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.3952, 0.8, 0.06399999, 1)
 theme_override_fonts/font = ExtResource("3_font_title")
 theme_override_font_sizes/font_size = 48
-text = "¡BOSQUE SALVADO!"
+text = "FOREST SAVED!"
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="Control/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
+[node name="NextLevelButton" type="Button" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_font_button")
+theme_override_font_sizes/font_size = 22
+text = "Next Level"
+
 [node name="ReplayButton" type="Button" parent="Control/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_font_button")
 theme_override_font_sizes/font_size = 22
-text = "Jugar de Nuevo"
+text = "Play Again"
 
 [node name="MenuButton" type="Button" parent="Control/Panel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_font_button")
 theme_override_font_sizes/font_size = 22
-text = "Menú Principal"
+text = "Main Menu"

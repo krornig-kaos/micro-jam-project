@@ -10,6 +10,7 @@ func _ready() -> void:
 	restart_button.grab_focus()
 
 func _on_restart_pressed() -> void:
+	AudioManager.stop_all_sfx()
 	get_tree().paused = false
 	get_tree().reload_current_scene()
 

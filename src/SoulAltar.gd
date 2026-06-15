@@ -83,8 +83,9 @@ func _update_world_saturation() -> void:
 			tween.finished.connect(_on_victory)
 
 func _on_victory() -> void:
+	print("VICTORIA: Mostrando pantalla de éxito")
 	var victory_scene := load("res://src/ui/victory_screen.tscn")
 	if victory_scene:
 		var victory_instance = victory_scene.instantiate()
-		get_tree().current_scene.add_child(victory_instance)
+		get_tree().root.add_child(victory_instance)
 		get_tree().paused = true

@@ -9,8 +9,12 @@ const CREDITS_BACK_KEY: String = "CREDITS_BACK"
 
 
 func _ready() -> void:
-	credits_label.text = tr(CREDITS_TITLE_KEY)
-	back_button.text = tr(CREDITS_BACK_KEY)
+	credits_label.text = "CREDITS\n\n" + \
+		"AbrCodeEs - Level Design & Visual Identity\n" + \
+		"wrallan - Logic Developer\n" + \
+		"kroning-kaos - Logic Developer & UX\n" + \
+		"mizael - Original Idea"
+	back_button.text = "Back"
 	back_button.pressed.connect(_on_back_pressed)
 	back_button.grab_focus()
 

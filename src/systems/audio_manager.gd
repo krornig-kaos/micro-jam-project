@@ -53,9 +53,19 @@ func play_sfx(sound_name: String, position: Vector2 = Vector2.ZERO, volume_db: f
 	add_child(player)
 	player.play()
 	
+	# Asegurar que el sonido se detenga si la escena cambia
+	player.add_to_group("auto_sfx")
+	
 	# Liberar el nodo automáticamente al terminar
 	player.finished.connect(player.queue_free)
 	return player
+
+## Detiene todos los sonidos marcados como auto_sfx (útil en reinicios de nivel).
+func stop_all_sfx() -> void:
+	for player in get_tree().get_nodes_in_group("auto_sfx"):
+		if is_instance_valid(player):
+			player.stop()
+			player.queue_free()
 
 ## Detiene un sonido suavemente con un fade-out.
 func stop_sfx(player: Node, fade_time: float = 0.1) -> void:

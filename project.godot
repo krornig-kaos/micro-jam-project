@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 AudioManager="*res://src/systems/audio_manager.gd"
-Paused="*res://src/ui/paused.gd"
+Paused="*res://src/ui/paused.tscn"
 
 [dotnet]
 
